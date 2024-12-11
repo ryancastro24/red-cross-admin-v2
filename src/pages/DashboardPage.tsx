@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Outlet } from "react-router";
+import { Outlet, useNavigation } from "react-router";
 import { Link } from "react-router";
 import { Divider } from "@nextui-org/divider";
 import { TiUserAdd } from "react-icons/ti";
@@ -13,7 +13,6 @@ import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
-  DropdownSection,
   DropdownItem,
 } from "@nextui-org/dropdown";
 function generateDate(): string {
@@ -43,7 +42,8 @@ function generateRunningTime() {
 const Dashboard = () => {
   const [navigation, setNavigation] = useState("/dashboard");
   const [time, setTime] = useState(generateRunningTime());
-
+  const pageNavigation = useNavigation();
+  console.log(pageNavigation);
   useEffect(() => {
     // Update the time every second
     const intervalId = setInterval(() => {
@@ -160,7 +160,11 @@ const Dashboard = () => {
         </div>
         <Divider className="my-4" />
         <div className="p-4 overflow-y-auto">
-          <Outlet />
+          {pageNavigation.state === "loading" ? (
+            <h2>Loadding...</h2>
+          ) : (
+            <Outlet />
+          )}
         </div>
       </div>
     </div>

@@ -3,15 +3,32 @@ import { Input } from "@nextui-org/input";
 import { DatePicker } from "@nextui-org/date-picker";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Button } from "@nextui-org/button";
-// Types for categories, gender, and address options
-import { Form } from "react-router-dom";
+import { Form, useNavigation, useActionData, Link } from "react-router-dom";
+import { registerUser } from "@/backendapi/user";
+import { Alert } from "@nextui-org/alert";
 export async function action({ request }: any) {
   const formData = await request.formData();
   const data: Record<string, FormDataEntryValue> = Object.fromEntries(
     formData.entries()
   );
-  console.log(data);
-  return data;
+  // Create a FormData instance to send the data to the Express API
+  const apiFormData = new FormData();
+
+  // Append each field in the data to the FormData
+  Object.keys(data).forEach((key) => {
+    // Handle different types of data, e.g., file upload
+    const value = data[key];
+    if (value instanceof File) {
+      apiFormData.append(key, value, value.name);
+    } else {
+      apiFormData.append(key, value as string);
+    }
+  });
+
+  const resultData = await registerUser(apiFormData);
+
+  console.log(resultData);
+  return resultData; // Return the form data as fallback
 }
 
 interface Option {
@@ -39,10 +56,12 @@ const address: Option[] = [
 const RegisterForm: React.FC = () => {
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  // const [register, setRegister] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  console.log(capturedImage);
+  const navigation = useNavigation();
+  const actionData = useActionData(); // Get the result from the action
 
   const handleOpenCamera = async (): Promise<void> => {
     try {
@@ -85,38 +104,69 @@ const RegisterForm: React.FC = () => {
     handleOpenCamera();
   };
 
+  const handleDownloadProfile = async () => {
+    if (!capturedImage) {
+      console.error("No image to download");
+      return;
+    }
+
+    // Create a Blob from the captured image
+    const blob = await fetch(capturedImage).then((res) => res.blob());
+
+    // Create a link element to trigger the download
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob); // Create an object URL for the Blob
+    link.download = "capturedImage.png"; // Set the default filename
+    link.click(); // Programmatically click the link to trigger the download
+
+    // Optionally, revoke the object URL after the download
+    URL.revokeObjectURL(link.href);
+  };
+
   return (
     <div className="w-full flex flex-col gap-5">
+      {actionData !== undefined && isVisible && (
+        <Alert
+          color="success"
+          title="Successfully registered user!"
+          endContent={
+            <Link to={"/dashboard"}>
+              <Button color="success" size="sm" variant="flat">
+                Register Another
+              </Button>
+            </Link>
+          }
+          onClose={() => setIsVisible(false)}
+        />
+      )}
       <h2>Register Form</h2>
 
       <div className="w-full grid grid-cols-[1fr,400px]">
         {/* Form Inputs */}
-        <Form method="POST" className="w-full grid grid-cols-2 gap-5">
+        <Form
+          method="POST"
+          className="w-full grid grid-cols-2 gap-5"
+          encType="multipart/form-data"
+        >
           <div>
-            <Input name="orNumber" label="OR Number" type="text" />
+            <Input required name="orNumber" label="OR Number" type="text" />
           </div>
           <div>
-            <Input name="name" label="Name" type="text" />
+            <Input required name="name" label="Name" type="text" />
           </div>
           <div>
-            <Input name="email" label="Email" type="email" />
+            <Input required name="email" label="Email" type="email" />
           </div>
           <div>
-            <Input name="password" label="Password" type="password" />
-          </div>
-
-          <Input
-            value={capturedImage ?? undefined}
-            type="hidden"
-            name="profile_picture"
-          />
-
-          <div>
-            <DatePicker name="dateStarted" label="Date Started" />
+            <Input required name="password" label="Password" type="password" />
           </div>
 
           <div>
-            <Select name="category" label="Select Category">
+            <DatePicker isRequired name="dateStarted" label="Date Started" />
+          </div>
+
+          <div>
+            <Select isRequired name="category" label="Select Category">
               {category.map((val) => (
                 <SelectItem key={val.key || val.label}>{val.label}</SelectItem>
               ))}
@@ -124,7 +174,7 @@ const RegisterForm: React.FC = () => {
           </div>
 
           <div>
-            <Select name="address" label="Select Address">
+            <Select isRequired name="address" label="Select Address">
               {address.map((val) => (
                 <SelectItem key={val.value || val.label}>
                   {val.label}
@@ -134,15 +184,25 @@ const RegisterForm: React.FC = () => {
           </div>
 
           <div>
-            <Select name="gender" label="Select Gender">
+            <Select isRequired name="gender" label="Select Gender">
               {gender.map((val) => (
                 <SelectItem key={val.key || val.label}>{val.label}</SelectItem>
               ))}
             </Select>
           </div>
-
-          <div className="col-span-2">
-            <Button type="submit" className="w-full h-[50px] " color="primary">
+          <div>
+            <Input required name="contact" label="Contact" type="text" />
+          </div>
+          <div>
+            <Input required name="file" label="Upload Image" type="file" />
+          </div>
+          <div className="cols-span-2">
+            <Button
+              isLoading={navigation.state === "submitting"}
+              type="submit"
+              className="w-full h-[50px] "
+              color="primary"
+            >
               SUBMIT
             </Button>
           </div>
@@ -197,7 +257,11 @@ const RegisterForm: React.FC = () => {
                   Retake
                 </Button>
 
-                <Button className="w-full" color="primary">
+                <Button
+                  className="w-full"
+                  color="primary"
+                  onClick={handleDownloadProfile} // Link the upload button
+                >
                   Upload
                 </Button>
               </>
