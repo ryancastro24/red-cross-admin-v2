@@ -178,6 +178,7 @@ export const columns = [
   { name: "CATEGORY", uid: "category", sortable: true },
   { name: "ADDRESS", uid: "address", sortable: true },
   { name: "OR NUMBER", uid: "orNumber" },
+  { name: "CONTACT", uid: "contact" },
   { name: "EMAIL", uid: "email" },
   { name: "ACTIONS", uid: "actions" },
 ];
@@ -194,7 +195,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "category", "address", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name","email", "category", "address", "actions"];
 
 type User = (typeof users)[0];
 
