@@ -9,10 +9,14 @@ import RegisterForm, {
 } from "./DashboardPages/RegisterForm";
 import Analytics from "./DashboardPages/Analytics";
 import Archives from "./DashboardPages/Archives";
-import DataTable from "./DashboardPages/DataTable";
+import DataTable, {
+  loader as dataTableLoader,
+  action as dataTableAction,
+} from "./DashboardPages/DataTable";
 import InstructorPage from "./DashboardPages/Intructors";
 import Certificate from "./DashboardPages/Certificate";
 import Dashboard from "./pages/DashboardPage";
+import { action as destroyUserAction } from "./destroypages/userDestroyAction";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,6 +36,14 @@ const router = createBrowserRouter([
       {
         path: "datatable",
         element: <DataTable />,
+        loader: dataTableLoader,
+        action: dataTableAction,
+        children: [
+          {
+            path: ":userId/destroy",
+            action: destroyUserAction,
+          },
+        ],
       },
 
       {

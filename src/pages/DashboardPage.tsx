@@ -43,7 +43,7 @@ const Dashboard = () => {
   const [navigation, setNavigation] = useState("/dashboard");
   const [time, setTime] = useState(generateRunningTime());
   const pageNavigation = useNavigation();
-  console.log(pageNavigation);
+
   useEffect(() => {
     // Update the time every second
     const intervalId = setInterval(() => {

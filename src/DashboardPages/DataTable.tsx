@@ -1,4 +1,4 @@
-import React, { SVGProps } from "react";
+import React, { SVGProps, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -22,8 +22,8 @@ import {
 } from "@nextui-org/react";
 import { DatePicker } from "@nextui-org/date-picker";
 import { Select, SelectItem } from "@nextui-org/select";
-import { users } from "../libs/sampleUserData";
-
+import { getUsersData } from "@/backendapi/user";
+import { UserType } from "@/backendapi/user";
 import {
   Modal,
   ModalContent,
@@ -31,6 +31,13 @@ import {
   ModalBody,
   ModalFooter,
 } from "@nextui-org/modal";
+import { updateUserData } from "@/backendapi/user";
+import { useLoaderData, Form, useNavigation } from "react-router-dom";
+export const loader = async () => {
+  const users = await getUsersData();
+
+  return { users };
+};
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
@@ -39,15 +46,52 @@ interface Option {
   value?: string;
   label: string;
 }
+type User = {
+  id: string;
+  _id: string; // Changed `_id` to `id` for consistency, but you can keep `_id` if required
+  name: string;
+  email: string;
+  address: string;
+  orNumber: number;
+  contact: string;
+  gender: string;
+  password: string;
+  userType: string;
+  certificateApproved: boolean;
+  profilePictureUrl: string;
+  certificateUrl: string;
+  category: string;
+  dateStarted: string; // ISO date string
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+};
+// action function
+export async function action({ request }: any) {
+  const formData = await request.formData(); // Get form data from the request
+  const data: Record<string, FormDataEntryValue> = Object.fromEntries(
+    formData.entries()
+  );
+
+  const userData: UserType = {
+    name: data.name as string,
+    email: data.email as string,
+    address: data.address as string,
+    category: data.category as string,
+    orNumber: parseInt(data.orNumber as string),
+    dateStarted: data.dateStarted as string, // Assuming this field is a number
+    // Add other fields as necessary
+  };
+
+  // Assuming `data.id` contains the user ID
+  const resultData = await updateUserData(userData, data.id as string);
+
+  console.log("Update result:", resultData);
+  return resultData; // Return the result of the API call
+}
 
 const category: Option[] = [
   { key: "standard", label: "Standard" },
   { key: "occupational", label: "Occupational" },
-];
-
-const gender: Option[] = [
-  { key: "male", label: "Male" },
-  { key: "female", label: "Female" },
 ];
 
 const address: Option[] = [
@@ -178,6 +222,7 @@ export const columns = [
   { name: "CATEGORY", uid: "category", sortable: true },
   { name: "ADDRESS", uid: "address", sortable: true },
   { name: "OR NUMBER", uid: "orNumber" },
+  { name: "GENDER", uid: "gender" },
   { name: "CONTACT", uid: "contact" },
   { name: "EMAIL", uid: "email" },
   { name: "ACTIONS", uid: "actions" },
@@ -195,13 +240,25 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name","email", "category", "address", "actions"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "name",
+  "email",
+  "category",
+  "address",
+  "actions",
+];
 
-type User = (typeof users)[0];
+type loaderData = {
+  users: User[];
+};
 
 export default function DataTable() {
+  const navigation = useNavigation();
+  const { users } = useLoaderData() as loaderData;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [filterValue, setFilterValue] = React.useState("");
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
     new Set([])
   );
@@ -217,6 +274,20 @@ export default function DataTable() {
 
   const [page, setPage] = React.useState(1);
 
+  const handleEditUser = (data: User) => {
+    onOpen();
+    setSelectedUser(data);
+  };
+
+  const handleOpenDeleteUser = (data: User) => {
+    setOpenDeleteModal(true);
+    setSelectedUser(data);
+  };
+
+  const handleCloseDeleteUser = (data: User) => {
+    setOpenDeleteModal(true);
+    setSelectedUser(data);
+  };
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
@@ -271,16 +342,21 @@ export default function DataTable() {
 
     switch (columnKey) {
       case "name":
-        return <p>{user.name}</p>;
+        return (
+          <User
+            avatarProps={{ radius: "full", src: user.profilePictureUrl }}
+            description={user.email}
+            name={cellValue}
+          >
+            {user.email}
+          </User>
+        );
       case "email":
         return <p>{user.email}</p>;
       case "address":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-400">
-              {user.address}
-            </p>
+            <p className="text-bold text-tiny capitalize">{user.address}</p>
           </div>
         );
       case "category":
@@ -296,7 +372,7 @@ export default function DataTable() {
         );
       case "actions":
         return (
-          <div className="relative flex justify-end items-center gap-2">
+          <div className="relative flex justify-center items-center gap-2">
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
@@ -305,10 +381,16 @@ export default function DataTable() {
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem key="view">View</DropdownItem>
-                <DropdownItem onClick={onOpen} key="edit">
+                <DropdownItem onClick={() => handleEditUser(user)} key="edit">
                   Edit
                 </DropdownItem>
-                <DropdownItem key="delete">Delete</DropdownItem>
+
+                <DropdownItem
+                  onClick={() => handleOpenDeleteUser(user)}
+                  key="delete"
+                >
+                  Delete
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -533,62 +615,124 @@ export default function DataTable() {
               <ModalHeader className="flex flex-col gap-1">
                 Update User Details
               </ModalHeader>
-              <ModalBody className="grid grid-cols-2 gap-5">
-                <div>
-                  <Input name="orNumber" label="OR Number" type="text" />
-                </div>
-                <div>
-                  <Input name="name" label="Name" type="text" />
-                </div>
-                <div>
-                  <Input name="email" label="Email" type="email" />
-                </div>
-                <div>
-                  <Input name="password" label="Password" type="password" />
-                </div>
+              <Form method="PUT">
+                <ModalBody className="grid grid-cols-2 gap-5">
+                  <div>
+                    <Input
+                      required
+                      defaultValue={selectedUser?.orNumber.toString()}
+                      name="orNumber"
+                      label="OR Number"
+                      type="number"
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      required
+                      defaultValue={selectedUser?.name}
+                      name="name"
+                      label="Name"
+                      type="text"
+                    />
+                  </div>
+                  <Input
+                    required
+                    defaultValue={selectedUser?._id}
+                    name="id"
+                    type="hidden"
+                  />
+                  <div>
+                    <Input
+                      required
+                      defaultValue={selectedUser?.email}
+                      name="email"
+                      label="Email"
+                      type="email"
+                    />
+                  </div>
 
-                <div>
-                  <DatePicker name="dateStarted" label="Date Started" />
-                </div>
+                  <div>
+                    <DatePicker
+                      isRequired
+                      name="dateStarted"
+                      label="Date Started"
+                    />
+                  </div>
 
-                <div>
-                  <Select name="category" label="Select Category">
-                    {category.map((val) => (
-                      <SelectItem key={val.key || val.label}>
-                        {val.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                </div>
+                  <div>
+                    <Select
+                      isRequired
+                      defaultSelectedKeys={[selectedUser?.category || ""]}
+                      name="category"
+                      label="Select Category"
+                    >
+                      {category.map((val) => (
+                        <SelectItem key={val.key || val.label}>
+                          {val.label}
+                        </SelectItem>
+                      ))}
+                    </Select>
+                  </div>
 
-                <div>
-                  <Select name="address" label="Select Address">
-                    {address.map((val) => (
-                      <SelectItem key={val.value || val.label}>
-                        {val.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                </div>
+                  <div>
+                    <Select
+                      isRequired
+                      defaultSelectedKeys={[selectedUser?.address || ""]}
+                      name="address"
+                      label="Select Address"
+                    >
+                      {address.map((val) => (
+                        <SelectItem key={val.value || val.label}>
+                          {val.label}
+                        </SelectItem>
+                      ))}
+                    </Select>
+                  </div>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button
+                    isLoading={navigation.state === "submitting"}
+                    type="submit"
+                    color="primary"
+                  >
+                    Save Changes
+                  </Button>
+                </ModalFooter>
+              </Form>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
 
-                <div>
-                  <Select name="gender" label="Select Gender">
-                    {gender.map((val) => (
-                      <SelectItem key={val.key || val.label}>
-                        {val.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                </div>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
-                </Button>
-              </ModalFooter>
+      <Modal
+        size="md"
+        isOpen={openDeleteModal}
+        onOpenChange={() => setOpenDeleteModal(false)}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader>Are you sure to delete user?</ModalHeader>
+              <Form
+                method="POST"
+                action={`/dashboard/datatable/${selectedUser?._id}/destroy`}
+              >
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button
+                    isLoading={navigation.state === "submitting"}
+                    type="submit"
+                    color="primary"
+                  >
+                    Confirm Delete
+                  </Button>
+                </ModalFooter>
+              </Form>
             </>
           )}
         </ModalContent>

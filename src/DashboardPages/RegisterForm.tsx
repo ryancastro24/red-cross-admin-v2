@@ -6,6 +6,8 @@ import { Button } from "@nextui-org/button";
 import { Form, useNavigation, useActionData, Link } from "react-router-dom";
 import { registerUser } from "@/backendapi/user";
 import { Alert } from "@nextui-org/alert";
+
+// action function
 export async function action({ request }: any) {
   const formData = await request.formData();
   const data: Record<string, FormDataEntryValue> = Object.fromEntries(
