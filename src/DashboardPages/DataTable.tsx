@@ -1,4 +1,4 @@
-import React, { SVGProps, useState } from "react";
+import React, { SVGProps, useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -22,7 +22,11 @@ import {
 } from "@nextui-org/react";
 import { DatePicker } from "@nextui-org/date-picker";
 import { Select, SelectItem } from "@nextui-org/select";
-import { getUsersData } from "@/backendapi/user";
+import {
+  getUsersData,
+  updateUserData,
+  updateUserCertificates,
+} from "@/backendapi/user";
 import { UserType } from "@/backendapi/user";
 import {
   Modal,
@@ -31,8 +35,13 @@ import {
   ModalBody,
   ModalFooter,
 } from "@nextui-org/modal";
-import { updateUserData } from "@/backendapi/user";
-import { useLoaderData, Form, useNavigation } from "react-router-dom";
+
+import {
+  useLoaderData,
+  Form,
+  useNavigation,
+  useSubmit,
+} from "react-router-dom";
 export const loader = async () => {
   const users = await getUsersData();
 
@@ -67,26 +76,43 @@ type User = {
 };
 // action function
 export async function action({ request }: any) {
-  const formData = await request.formData(); // Get form data from the request
-  const data: Record<string, FormDataEntryValue> = Object.fromEntries(
-    formData.entries()
-  );
+  console.log(request);
 
-  const userData: UserType = {
-    name: data.name as string,
-    email: data.email as string,
-    address: data.address as string,
-    category: data.category as string,
-    orNumber: parseInt(data.orNumber as string),
-    dateStarted: data.dateStarted as string, // Assuming this field is a number
-    // Add other fields as necessary
-  };
+  // Get form data from the request
+  if (request.method === "POST") {
+    const formData = await request.formData();
+    const userIdsString = formData.get("selectedUsers"); // Get the string from formData
 
-  // Assuming `data.id` contains the user ID
-  const resultData = await updateUserData(userData, data.id as string);
+    // Check if userIdsString is valid before parsing it
+    if (typeof userIdsString === "string") {
+      const userIds = JSON.parse(userIdsString); // Parse the string into an array
+      const finaluserids = JSON.parse(userIds);
+      console.log(finaluserids);
 
-  console.log("Update result:", resultData);
-  return resultData; // Return the result of the API call
+      const result = await updateUserCertificates(finaluserids);
+      return result;
+    } else {
+      throw new Error("Invalid userIds format. Expected a string.");
+    }
+  } else if (request.method === "PUT") {
+    const formData = await request.formData();
+    const data: Record<string, FormDataEntryValue> = Object.fromEntries(
+      formData.entries()
+    );
+
+    const userData: UserType = {
+      name: data.name as string,
+      email: data.email as string,
+      address: data.address as string,
+      category: data.category as string,
+      orNumber: parseInt(data.orNumber as string),
+      dateStarted: data.dateStarted as string,
+    };
+
+    const resultData = await updateUserData(userData, data.id as string);
+    console.log("Update result:", resultData);
+    return resultData; // Return the result of the API call
+  }
 }
 
 const category: Option[] = [
@@ -253,15 +279,18 @@ type loaderData = {
 };
 
 export default function DataTable() {
+  const submit = useSubmit();
   const navigation = useNavigation();
   const { users } = useLoaderData() as loaderData;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
-    new Set([])
-  );
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(() => {
+    // Initialize state from localStorage if available
+    const storedKeys = localStorage.getItem("selectedKeys");
+    return storedKeys ? new Set(JSON.parse(storedKeys)) : new Set([]);
+  });
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
@@ -274,6 +303,23 @@ export default function DataTable() {
 
   const [page, setPage] = React.useState(1);
 
+  // Update localStorage whenever selectedKeys changes
+  useEffect(() => {
+    const selectedKeysArray = Array.from(selectedKeys); // Convert Set to Array
+    localStorage.setItem("selectedKeys", JSON.stringify(selectedKeysArray));
+  }, [selectedKeys]);
+
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // Prevent native form submission
+
+    const storedKeys = localStorage.getItem("selectedKeys");
+    const formData = new FormData();
+    // Convert Set to Array and then to a JSON string
+    formData.append("selectedUsers", JSON.stringify(storedKeys));
+
+    // Programmatically submit the formData
+    submit(formData, { method: "post" });
+  };
   const handleEditUser = (data: User) => {
     onOpen();
     setSelectedUser(data);
@@ -284,10 +330,6 @@ export default function DataTable() {
     setSelectedUser(data);
   };
 
-  const handleCloseDeleteUser = (data: User) => {
-    setOpenDeleteModal(true);
-    setSelectedUser(data);
-  };
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
@@ -496,9 +538,12 @@ export default function DataTable() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<PlusIcon />}>
-              Add New
-            </Button>
+
+            <Form method="POST" onSubmit={(e) => e.preventDefault()}>
+              <Button onClick={handleSubmit} type="button" color="primary">
+                Course Completed
+              </Button>
+            </Form>
           </div>
         </div>
         <div className="flex justify-between items-center">
