@@ -9,6 +9,7 @@ import { IoArchiveSharp } from "react-icons/io5";
 import { FaBriefcaseMedical } from "react-icons/fa";
 import { PiCertificateFill } from "react-icons/pi";
 import { Avatar } from "@nextui-org/avatar";
+import Loading from "@/components/Loading";
 import {
   Dropdown,
   DropdownTrigger,
@@ -160,11 +161,7 @@ const Dashboard = () => {
         </div>
         <Divider className="my-4" />
         <div className="p-4 overflow-y-auto">
-          {pageNavigation.state === "loading" ? (
-            <h2>Loadding...</h2>
-          ) : (
-            <Outlet />
-          )}
+          {pageNavigation.state === "loading" ? <Loading /> : <Outlet />}
         </div>
       </div>
     </div>

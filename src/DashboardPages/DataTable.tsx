@@ -42,6 +42,8 @@ import {
   useNavigation,
   useSubmit,
 } from "react-router-dom";
+
+//loader action
 export const loader = async () => {
   const users = await getUsersData();
 

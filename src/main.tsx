@@ -7,16 +7,25 @@ import LoginPage from "./pages/Homepage";
 import RegisterForm, {
   action as registerAction,
 } from "./DashboardPages/RegisterForm";
-import Analytics from "./DashboardPages/Analytics";
-import Archives from "./DashboardPages/Archives";
+import Analytics, {
+  loader as analyticsLoader,
+} from "./DashboardPages/Analytics";
+import Archives, { loader as archiveLoader } from "./DashboardPages/Archives";
 import DataTable, {
   loader as dataTableLoader,
   action as dataTableAction,
 } from "./DashboardPages/DataTable";
-import InstructorPage from "./DashboardPages/Intructors";
-import Certificate from "./DashboardPages/Certificate";
+import InstructorPage, {
+  loader as instructorLoader,
+} from "./DashboardPages/Intructors";
+import Certificate, {
+  loader as certificateLoader,
+} from "./DashboardPages/Certificate";
 import Dashboard from "./pages/DashboardPage";
 import { action as destroyUserAction } from "./destroypages/userDestroyAction";
+import InstructorRatingDetials, {
+  loader as instructorRatingLoader,
+} from "./components/InstructorRatingDetials";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -49,21 +58,30 @@ const router = createBrowserRouter([
       {
         path: "analytics",
         element: <Analytics />,
+        loader: analyticsLoader,
       },
 
       {
         path: "archives",
         element: <Archives />,
+        loader: archiveLoader,
       },
 
       {
         path: "instructor_page",
         element: <InstructorPage />,
+        loader: instructorLoader,
       },
 
       {
         path: "certificate",
         element: <Certificate />,
+        loader: certificateLoader,
+      },
+      {
+        path: "instructor_page/instructor_ratings/:id",
+        element: <InstructorRatingDetials />,
+        loader: instructorRatingLoader,
       },
     ],
   },

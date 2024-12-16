@@ -5,8 +5,10 @@ export type UserType = {
   orNumber: number;
   dateStarted: string;
   email: string;
+  _id: string;
+  certificateApproved: boolean;
 };
-
+// REGISTER USER
 export async function registerUser(formData: FormData) {
   try {
     const response = await fetch(
@@ -46,6 +48,42 @@ export async function getUsersData() {
   }
 }
 
+// get all user cert to be uploaded
+export async function getUsersCertToBeUpload() {
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/user/getAllUserCerToBeUpload"
+    );
+
+    if (response.ok) {
+      const result = await response.json();
+      return result; // Return the response from the server
+    } else {
+      console.error("Failed to upload data to the server.");
+    }
+  } catch (error) {
+    console.error("Error during data upload:", error);
+  }
+}
+
+// get all approved user
+
+export async function getAllApprovedUsersData() {
+  try {
+    const response = await fetch("http://localhost:5000/api/user/approvedUser");
+
+    if (response.ok) {
+      const result = await response.json();
+      return result; // Return the response from the server
+    } else {
+      console.error("Failed to upload data to the server.");
+    }
+  } catch (error) {
+    console.error("Error during data upload:", error);
+  }
+}
+
+// update user data
 export async function updateUserData(formData: UserType, id: string) {
   console.log("i was called");
 
@@ -73,6 +111,7 @@ export async function updateUserData(formData: UserType, id: string) {
   }
 }
 
+// delete user data
 export async function deleteUserData(id: string) {
   console.log("Delete request initiated for user ID:", id);
 
@@ -100,6 +139,7 @@ export async function deleteUserData(id: string) {
   }
 }
 
+// update user cert to approved
 export async function updateUserCertificates(userIds: any) {
   try {
     const response = await fetch(

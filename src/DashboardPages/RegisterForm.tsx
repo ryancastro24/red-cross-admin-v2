@@ -6,7 +6,7 @@ import { Button } from "@nextui-org/button";
 import { Form, useNavigation, useActionData, Link } from "react-router-dom";
 import { registerUser } from "@/backendapi/user";
 import { Alert } from "@nextui-org/alert";
-
+import userProfile from "@/assets/userprofile.png";
 // action function
 export async function action({ request }: any) {
   const formData = await request.formData();
@@ -212,7 +212,14 @@ const RegisterForm: React.FC = () => {
 
         <div className="w-full p-5 flex flex-col gap-5">
           {/* Camera Preview or Captured Image */}
-          <div className="w-full bg-slate-500 h-[300px] rounded flex justify-center items-center">
+          <div
+            className="w-full h-[300px] rounded flex justify-center items-center"
+            style={{
+              backgroundImage: `url(${userProfile})`,
+              backgroundSize: "90%",
+              backgroundPosition: "center",
+            }}
+          >
             {capturedImage ? (
               <img
                 src={capturedImage}
