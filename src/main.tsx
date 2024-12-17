@@ -20,6 +20,7 @@ import InstructorPage, {
 } from "./DashboardPages/Intructors";
 import Certificate, {
   loader as certificateLoader,
+  action as certificateAction,
 } from "./DashboardPages/Certificate";
 import Dashboard from "./pages/DashboardPage";
 import { action as destroyUserAction } from "./destroypages/userDestroyAction";
@@ -77,6 +78,7 @@ const router = createBrowserRouter([
         path: "certificate",
         element: <Certificate />,
         loader: certificateLoader,
+        action: certificateAction,
       },
       {
         path: "instructor_page/instructor_ratings/:id",

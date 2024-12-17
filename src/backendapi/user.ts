@@ -52,7 +52,7 @@ export async function getUsersData() {
 export async function getUsersCertToBeUpload() {
   try {
     const response = await fetch(
-      "http://localhost:5000/api/user/getAllUserCerToBeUpload"
+      "https://red-cross-api-final.onrender.com/api/user/getAllUserCerToBeUpload"
     );
 
     if (response.ok) {
@@ -70,7 +70,9 @@ export async function getUsersCertToBeUpload() {
 
 export async function getAllApprovedUsersData() {
   try {
-    const response = await fetch("http://localhost:5000/api/user/approvedUser");
+    const response = await fetch(
+      "https://red-cross-api-final.onrender.com/api/user/approvedUser"
+    );
 
     if (response.ok) {
       const result = await response.json();
@@ -165,5 +167,28 @@ export async function updateUserCertificates(userIds: any) {
   } catch (error) {
     console.error("Error during update request:", error);
     throw error; // Re-throw the error for further handling
+  }
+}
+
+//update user certificate url
+export async function updateUserCertificateUrl(formData: FormData, id: any) {
+  try {
+    const response = await fetch(
+      `https://red-cross-api-final.onrender.com/updateUserCertificateUrl/${id}`,
+      {
+        method: "PUT",
+        body: formData, // Send FormData as the body of the request
+      }
+    );
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log("Data uploaded successfully:", result);
+      return result; // Return the response from the server
+    } else {
+      console.error("Failed to upload data to the server.");
+    }
+  } catch (error) {
+    console.error("Error during data upload:", error);
   }
 }

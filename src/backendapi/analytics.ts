@@ -1,7 +1,7 @@
 export async function getAllDataPerMonth() {
   try {
     const response = await fetch(
-      "http://localhost:5000/api/user/getAllDataPerMonth"
+      "https://red-cross-api-final.onrender.com/api/user/getAllDataPerMonth"
     );
 
     if (response.ok) {
@@ -17,7 +17,9 @@ export async function getAllDataPerMonth() {
 
 export async function getAllCities() {
   try {
-    const response = await fetch("http://localhost:5000/api/user/getAllCities");
+    const response = await fetch(
+      "https://red-cross-api-final.onrender.com/api/user/getAllCities"
+    );
 
     if (response.ok) {
       const result = await response.json();
@@ -33,7 +35,7 @@ export async function getAllCities() {
 export async function getAllGenders() {
   try {
     const response = await fetch(
-      "http://localhost:5000/api/user/getAllGenders"
+      "https://red-cross-api-final.onrender.com/api/user/getAllGenders"
     );
 
     if (response.ok) {
