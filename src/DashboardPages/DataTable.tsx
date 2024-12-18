@@ -109,6 +109,8 @@ export async function action({ request }: any) {
       category: data.category as string,
       orNumber: parseInt(data.orNumber as string),
       dateStarted: data.dateStarted as string,
+      _id: data._id as string, // Default value if _id is not provided
+      certificateApproved: data.certificateApproved === "true", // Default value if certificateApproved is not provided
     };
 
     const resultData = await updateUserData(userData, data.id as string);
