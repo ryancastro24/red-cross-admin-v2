@@ -35,7 +35,10 @@ export async function getAllCities() {
 export async function getAllGenders() {
   try {
     const response = await fetch(
-      "https://red-cross-api-final.onrender.com/api/user/getAllGenders"
+      "https://red-cross-api-final.onrender.com/api/user/getAllGenders",
+      {
+        credentials: "include",
+      }
     );
 
     if (response.ok) {
