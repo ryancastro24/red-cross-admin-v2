@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { NextUIProvider } from "@nextui-org/react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import LoginPage from "./pages/Homepage";
+import LoginPage, { action as loginAction } from "./pages/Homepage";
 import RegisterForm, {
   action as registerAction,
 } from "./DashboardPages/RegisterForm";
@@ -27,15 +27,27 @@ import { action as destroyUserAction } from "./destroypages/userDestroyAction";
 import InstructorRatingDetials, {
   loader as instructorRatingLoader,
 } from "./components/InstructorRatingDetials";
+import RedirectIfAuthenticated from "./components/RedirectIfAuthenticated";
+import PrivateRoute from "./components/PrivateRoute";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LoginPage />,
+    element: (
+      <>
+        <RedirectIfAuthenticated />
+        <LoginPage />
+      </>
+    ),
+    action: loginAction,
   },
 
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    element: (
+      <PrivateRoute>
+        <Dashboard />
+      </PrivateRoute>
+    ),
     children: [
       {
         path: "/dashboard",

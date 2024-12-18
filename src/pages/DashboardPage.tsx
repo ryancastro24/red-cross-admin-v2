@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Outlet, useNavigation } from "react-router";
+import { Outlet, useNavigation, useNavigate } from "react-router";
 import { Link } from "react-router";
 import { Divider } from "@nextui-org/divider";
 import { TiUserAdd } from "react-icons/ti";
@@ -44,6 +44,14 @@ const Dashboard = () => {
   const [navigation, setNavigation] = useState("/dashboard");
   const [time, setTime] = useState(generateRunningTime());
   const pageNavigation = useNavigation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Delete the session_token cookie by setting its expiration date to the past
+    document.cookie =
+      "session_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;";
+    navigate("/"); // This will navigate to the login page
+  };
 
   useEffect(() => {
     // Update the time every second
@@ -150,11 +158,13 @@ const Dashboard = () => {
               <Avatar className="cursor-pointer " name="Admin" />
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
-              <DropdownItem key="new">New file</DropdownItem>
-              <DropdownItem key="copy">Copy link</DropdownItem>
-              <DropdownItem key="edit">Edit file</DropdownItem>
-              <DropdownItem key="delete" className="text-danger" color="danger">
-                Delete file
+              <DropdownItem
+                onClick={handleLogout}
+                key="delete"
+                className="text-danger"
+                color="danger"
+              >
+                Logout
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
