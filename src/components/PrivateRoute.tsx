@@ -1,22 +1,21 @@
-import { Navigate, Outlet } from "react-router-dom";
+import React, { ReactNode } from "react";
+import { Navigate } from "react-router-dom";
 import { checkAuth } from "../utils/auth";
-import Dashboard from "@/pages/DashboardPage"; // Import Dashboard component
 
-const PrivateRoute = () => {
+type PrivateRouteProps = {
+  children: ReactNode; // Explicitly define children prop
+};
+
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const isAuthenticated = checkAuth();
 
-  // If authenticated, render Dashboard and its children
-  if (isAuthenticated) {
-    return (
-      <div>
-        <Dashboard /> {/* Render Dashboard directly */}
-        <Outlet /> {/* Render nested routes here */}
-      </div>
-    );
+  // Redirect to login if not authenticated
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
   }
 
-  // If not authenticated, redirect to login page
-  return <Navigate to="/" replace />;
+  // Render children if authenticated
+  return <>{children}</>;
 };
 
 export default PrivateRoute;
