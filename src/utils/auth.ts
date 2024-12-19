@@ -1,22 +1,15 @@
 export const checkAuth = () => {
-  // Get all cookies as a string
-  const cookies = document.cookie;
+  // Get the session_token from localStorage
+  const sessionToken = localStorage.getItem("session_token");
 
-  // Log all cookies to see their content
-  console.log("All cookies:", cookies);
+  // Log the session token to see its content
+  console.log("Session Token: ", sessionToken);
 
-  // Search for the session_token cookie in the document cookies
-  const sessionToken = cookies
-    .split("; ")
-    .find((row) => row.startsWith("session_token="));
-
-  // Extract the value of session_token from the cookie string
+  // Check if the session_token exists in localStorage
   if (sessionToken) {
-    const token = sessionToken.split("=")[1];
-    console.log("Session Token: ", token);
-    return token ? true : false;
+    return true; // Token exists, so the user is authenticated
   }
 
-  console.log("No session token found");
-  return false;
+  console.log("No session token found in localStorage");
+  return false; // No token, user is not authenticated
 };
