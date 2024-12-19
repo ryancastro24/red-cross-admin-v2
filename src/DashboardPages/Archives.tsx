@@ -130,6 +130,7 @@ const Archives = () => {
       <Accordion>
         {Object.keys(groupedUsers).map((date, index) => (
           <AccordionItem
+            indicator
             key={index}
             aria-label={`Accordion ${index + 1}`}
             title={`Updated on ${date}`}
