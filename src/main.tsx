@@ -1,3 +1,5 @@
+// @ts-ignore
+import "@fontsource/poppins";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
@@ -29,6 +31,7 @@ import InstructorRatingDetials, {
 } from "./components/InstructorRatingDetials";
 import RedirectIfAuthenticated from "./components/RedirectIfAuthenticated";
 import PrivateRoute from "./components/PrivateRoute";
+import ErrorPage from "./pages/ErrorPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -39,6 +42,7 @@ const router = createBrowserRouter([
       </>
     ),
     action: loginAction,
+    errorElement: <ErrorPage />,
   },
 
   {
@@ -48,6 +52,7 @@ const router = createBrowserRouter([
         <Dashboard />
       </PrivateRoute>
     ),
+
     children: [
       {
         path: "/dashboard",

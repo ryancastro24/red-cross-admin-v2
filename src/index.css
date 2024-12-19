@@ -1,7 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+/* Set Poppins as the default font */
+body {
+  @apply font-poppins;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;
