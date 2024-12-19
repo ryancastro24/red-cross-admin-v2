@@ -12,7 +12,7 @@ import RegisterForm, {
 import Analytics, {
   loader as analyticsLoader,
 } from "./DashboardPages/Analytics";
-import Archives, { loader as archiveLoader } from "./DashboardPages/Archives";
+import Archives from "./DashboardPages/Archives";
 import DataTable, {
   loader as dataTableLoader,
   action as dataTableAction,
@@ -82,7 +82,6 @@ const router = createBrowserRouter([
       {
         path: "archives",
         element: <Archives />,
-        loader: archiveLoader,
       },
 
       {
