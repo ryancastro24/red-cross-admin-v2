@@ -1,6 +1,7 @@
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import { useMemo } from "react";
-
+import { User } from "@nextui-org/user";
+import { Divider } from "@nextui-org/react";
 // Define a type for the user object
 interface User {
   _id: string;
@@ -126,14 +127,14 @@ const Archives = () => {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col gap-5">
+      <h2>Archives</h2>
       <Accordion>
         {Object.keys(groupedUsers).map((date, index) => (
           <AccordionItem
-            indicator
             key={index}
             aria-label={`Accordion ${index + 1}`}
-            title={`Updated on ${date}`}
+            title={`${date}`}
           >
             {/* Nested Accordion for each user */}
             <Accordion>
@@ -143,16 +144,28 @@ const Archives = () => {
                   aria-label={user.name}
                   title={user.name}
                 >
-                  <ul>
-                    <li>Email: {user.email}</li>
-                    <li>Address: {user.address}</li>
-                    <li>Contact: {user.contact}</li>
-                    <li>Category: {user.category}</li>
-                    <li>OR Number: {user.orNumber}</li>
-                    <li>Gender: {user.gender}</li>
-                    <li>Started: {user.dateStarted}</li>
-                    <li>Created At: {user.createdAt}</li>
-                  </ul>
+                  <div className="flex flex-col gap-5">
+                    <User
+                      avatarProps={{
+                        src: user.profilePictureUrl,
+                      }}
+                      description={user.email}
+                      name={user.name}
+                    />
+                    <ul className="flex justify-center gap-1 w-full flex-wrap">
+                      <li>Address: {user.address}</li>
+                      <Divider orientation="vertical" />
+                      <li>Contact: {user.contact}</li>
+                      <Divider orientation="vertical" />
+                      <li>Category: {user.category}</li>
+                      <Divider orientation="vertical" />
+                      <li>OR Number: {user.orNumber}</li>
+                      <Divider orientation="vertical" />
+                      <li>Gender: {user.gender}</li>
+                      <Divider orientation="vertical" />
+                      <li>Started: {user.dateStarted}</li>
+                    </ul>
+                  </div>
                 </AccordionItem>
               ))}
             </Accordion>
