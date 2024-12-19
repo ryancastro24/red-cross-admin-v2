@@ -111,7 +111,12 @@ const users: User[] = [
 const Archives = () => {
   const groupedUsers = useMemo(() => {
     return users.reduce<{ [key: string]: User[] }>((acc, user) => {
-      const date = new Date(user.updatedAt).toLocaleDateString();
+      // Format the updatedAt date as "Month Day, Year"
+      const date = new Date(user.updatedAt).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
       if (!acc[date]) {
         acc[date] = [];
       }
@@ -129,21 +134,27 @@ const Archives = () => {
             aria-label={`Accordion ${index + 1}`}
             title={`Updated on ${date}`}
           >
-            <ul>
+            {/* Nested Accordion for each user */}
+            <Accordion>
               {groupedUsers[date].map((user) => (
-                <li key={user._id}>
-                  <strong>{user.name}</strong>
-                  <br />
-                  Email: {user.email}
-                  <br />
-                  Address: {user.address}
-                  <br />
-                  Contact: {user.contact}
-                  <br />
-                  Category: {user.category}
-                </li>
+                <AccordionItem
+                  key={user._id}
+                  aria-label={user.name}
+                  title={user.name}
+                >
+                  <ul>
+                    <li>Email: {user.email}</li>
+                    <li>Address: {user.address}</li>
+                    <li>Contact: {user.contact}</li>
+                    <li>Category: {user.category}</li>
+                    <li>OR Number: {user.orNumber}</li>
+                    <li>Gender: {user.gender}</li>
+                    <li>Started: {user.dateStarted}</li>
+                    <li>Created At: {user.createdAt}</li>
+                  </ul>
+                </AccordionItem>
               ))}
-            </ul>
+            </Accordion>
           </AccordionItem>
         ))}
       </Accordion>
