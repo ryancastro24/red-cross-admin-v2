@@ -42,9 +42,10 @@ const CertificateContainer = ({
         }}
       >
         <img
+          width={100}
           src={redcrosslogo}
           alt="redcross"
-          className="absolute top-8 left-32 w-[100px]"
+          className="absolute top-8 left-32 "
         />
         <img src="" alt="" />
         <div
