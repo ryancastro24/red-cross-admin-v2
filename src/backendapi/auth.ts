@@ -16,12 +16,12 @@ export async function loginUser(data: any) {
     if (response.ok) {
       const result = await response.json();
 
-      console.log(result);
+      console.log("result", result);
       console.log("Data uploaded successfully:", result);
-      localStorage.setItem("session_token", result.token); // Save token in localStorage
+      localStorage.setItem("session_token", result.data); // Save token in localStorage
 
       // Optionally, store the userType if needed
-      localStorage.setItem("userType", data.userType);
+      localStorage.setItem("userType", result.userType);
 
       // You can now redirect the user or take further actions
       console.log("Login successful!");
