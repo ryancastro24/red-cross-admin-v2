@@ -67,11 +67,11 @@ const Dashboard = () => {
   return (
     <div className="w-full h-screen  flex justify-between items-center">
       <div className="w-[250px] h-full bg-red-500 flex flex-col gap-6 px-3 py-5">
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-1 items-center">
           <img src={logo} alt="logo" width={80} height={80} />
-          <div className="flex gap-2 flex-col">
-            <h2 className="text-white text-xl">Red Cross</h2>
-            <span className="text-white text-sm font-light">Cavite</span>
+          <div className="flex flex-col">
+            <h2 className="text-white text-lg font-bold">Red Cross</h2>
+            <span className="text-white text-xs font-light">Cavite</span>
           </div>
         </div>
         <ul className="flex flex-col gap-3">
