@@ -10,6 +10,8 @@ import { FaBriefcaseMedical } from "react-icons/fa";
 import { PiCertificateFill } from "react-icons/pi";
 import { Avatar } from "@nextui-org/avatar";
 import Loading from "@/components/Loading";
+import { User } from "@nextui-org/user";
+import logo from "@/assets/redcross_logo.png";
 import {
   Dropdown,
   DropdownTrigger,
@@ -66,7 +68,13 @@ const Dashboard = () => {
   return (
     <div className="w-full h-screen  flex justify-between items-center">
       <div className="w-[250px] h-full bg-red-500 flex flex-col gap-6 px-3 py-5">
-        <h2>Dashboard Page</h2>
+        <User
+          avatarProps={{
+            src: logo,
+          }}
+          description="Cavite"
+          name="Red Cross"
+        />
         <ul className="flex flex-col gap-3">
           <Link
             onClick={() => setNavigation("/dashboard")}

@@ -259,9 +259,8 @@ export const columns = [
 ];
 
 export const statusOptions = [
-  { name: "Active", uid: "active" },
-  { name: "Paused", uid: "paused" },
-  { name: "Vacation", uid: "vacation" },
+  { name: "Standard", uid: "standard" },
+  { name: "Occupational", uid: "occupational" },
 ];
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
