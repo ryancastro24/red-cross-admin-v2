@@ -68,13 +68,13 @@ const Dashboard = () => {
   return (
     <div className="w-full h-screen  flex justify-between items-center">
       <div className="w-[250px] h-full bg-red-500 flex flex-col gap-6 px-3 py-5">
-        <User
-          avatarProps={{
-            src: logo,
-          }}
-          description="Cavite"
-          name="Red Cross"
-        />
+        <div className="flex gap-2 items-center">
+          <img src={logo} alt="logo" width={80} height={80} />
+          <div className="flex gap-2 flex-col">
+            <h2 className="text-white text-xl">Red Cross</h2>
+            <span className="text-white text-sm font-light">Cavite</span>
+          </div>
+        </div>
         <ul className="flex flex-col gap-3">
           <Link
             onClick={() => setNavigation("/dashboard")}
