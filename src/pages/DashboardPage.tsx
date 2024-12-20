@@ -47,10 +47,11 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Delete the session_token cookie by setting its expiration date to the past
-    document.cookie =
-      "session_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;";
-    navigate("/"); // This will navigate to the login page
+    // Remove the session_token from localStorage
+    localStorage.removeItem("session_token");
+
+    // Navigate to the login page
+    navigate("/");
   };
 
   useEffect(() => {
