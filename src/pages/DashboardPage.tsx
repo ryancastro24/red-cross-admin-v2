@@ -10,7 +10,6 @@ import { FaBriefcaseMedical } from "react-icons/fa";
 import { PiCertificateFill } from "react-icons/pi";
 import { Avatar } from "@nextui-org/avatar";
 import Loading from "@/components/Loading";
-import { User } from "@nextui-org/user";
 import logo from "@/assets/redcross_logo.png";
 import {
   Dropdown,
