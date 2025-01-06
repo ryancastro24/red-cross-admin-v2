@@ -69,7 +69,12 @@ const Certificate = () => {
     return instructor?.label || ""; // Default to an empty string if no match is found
   });
 
-  console.log(selectedNames);
+  const formatNames = (names: string[]): string => {
+    if (names.length === 0) return "Selected Instructors";
+    if (names.length === 1) return names[0];
+    if (names.length === 2) return `${names[0]} and ${names[1]}`;
+    return `${names.slice(0, -1).join(", ")}, and ${names[names.length - 1]}`;
+  };
 
   const { users } = useLoaderData() as Users;
   const navigation = useNavigation();
@@ -195,6 +200,7 @@ const Certificate = () => {
         dateEvaluation={evaluationDate || "No Date"}
         dateStarted={formattedDateStarted || "No Date"}
         dateValidity={validUntil || "No Date"}
+        instructors={formatNames(selectedNames)}
       />
 
       <div className="grid grid-cols-2 gap-8">
@@ -327,7 +333,7 @@ const Certificate = () => {
                 Aguinaldo Highway, Barangay Zone IV, Dasmarinas Cavity and
                 PASSED the evaluating examination given on {evaluationDate}. The
                 Training was conducted under the supervision of{" "}
-                {selectedNames.join(", ") || "Selected Instructors"}
+                {formatNames(selectedNames)}
               </p>
 
               <p className="text-xs font-thin indent-8 text-justify mt-2">

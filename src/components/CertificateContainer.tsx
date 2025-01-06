@@ -6,6 +6,7 @@ type CertificateContainerTypes = {
   dateValidity: string | undefined;
   dateStarted: string | undefined;
   category: string | undefined;
+  instructors: string | undefined;
 };
 
 const CertificateContainer = ({
@@ -14,6 +15,7 @@ const CertificateContainer = ({
   dateValidity,
   dateStarted,
   category,
+  instructors,
 }: CertificateContainerTypes) => {
   return (
     <div
@@ -144,16 +146,7 @@ const CertificateContainer = ({
               Building, Emilio Aguinaldo Highway, Barangay Zone IV, Dasmariñas
               Cavite City, and <strong>PASSED</strong> the evaluating
               examination given on {dateEvaluation}. The training was conducted
-              under the supervision of{" "}
-              {/* {instructors.length > 0
-                ? instructors.map((instructor, index) => (
-                    <span key={index}>
-                      {index > 0 && ", "}
-                      {instructor}
-                    </span>
-                  ))
-                : "select instructors"}
-              . */}
+              under the supervision of {instructors}
             </p>
             <p
               style={{
