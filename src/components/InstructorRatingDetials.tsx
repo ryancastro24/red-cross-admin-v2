@@ -72,7 +72,15 @@ const InstructorRatingDetails = () => {
               GO BACK
             </Button>
 
-            <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-2 gap-4">
+              <Button
+                variant="light"
+                className="absolute top-2 left-2"
+                color="primary"
+                onPress={() => navigate(-1)} // Navigate to the previous page
+              >
+                GO BACK
+              </Button>
               {instructorRatings.map((val) => (
                 <Card key={val._id} className="w-full">
                   <CardHeader className="flex gap-3">
@@ -84,7 +92,7 @@ const InstructorRatingDetails = () => {
                     </div>
                   </CardHeader>
 
-                  <CardBody className="grid grid-cols-2 gap-5">
+                  <CardBody className="w-full flex flex-col gap-3">
                     <Progress
                       className="max-w-md"
                       label="Ability to explain teh course material"

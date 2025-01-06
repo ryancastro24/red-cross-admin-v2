@@ -15,7 +15,7 @@ const InstructorPage = () => {
     <div className="w-full flex flex-col gap-8">
       <h2>Instructor Page</h2>
 
-      <div className="w-full h-full flex flex-col gap-5">
+      <div className="w-full h-full grid grid-cols-2 gap-5">
         {instructors.map((val: any) => (
           <Link
             key={val._id}
@@ -30,7 +30,7 @@ const InstructorPage = () => {
                 </div>
               </CardHeader>
 
-              <CardBody className="grid grid-cols-2 gap-5">
+              <CardBody className="flex flex-col gap-3">
                 <Progress
                   className="max-w-md"
                   label="Ability to explain teh course material"
