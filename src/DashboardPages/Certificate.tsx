@@ -21,7 +21,7 @@ import CertificateContainer from "@/components/CertificateContainer";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { updateUserCertificateUrl } from "@/backendapi/user";
-import { Select, SelectItem } from "@nextui-org/react";
+import { select, Select, SelectItem } from "@nextui-org/react";
 import { instructors } from "@/libs/instructors";
 export async function action({ request }: any) {
   const formData = await request.formData();
@@ -63,9 +63,14 @@ const Certificate = () => {
     new Set([])
   );
 
-  console.log("instrutors set", instructors);
-  console.log("instructors to array", Array.from(instructors));
-  console.log("array to string converted", Array.from(instructors).toString());
+  // Convert instructorsData (Selection) to an array and map to labels
+  const selectedNames = Array.from(instructorsData).map((key) => {
+    const instructor = instructors.find((a) => a.key === key); // Use the 'instructors' array here
+    return instructor?.label || ""; // Default to an empty string if no match is found
+  });
+
+  console.log(selectedNames);
+
   const { users } = useLoaderData() as Users;
   const navigation = useNavigation();
   // State to store the selected name
@@ -321,8 +326,8 @@ const Certificate = () => {
                 Dasmarinas City Branch, G/F Units 2 & 3 Amada Building, Emilio
                 Aguinaldo Highway, Barangay Zone IV, Dasmarinas Cavity and
                 PASSED the evaluating examination given on {evaluationDate}. The
-                Training was conducted under the supervision of the Selected
-                Instructors
+                Training was conducted under the supervision of{" "}
+                {selectedNames.join(", ") || "Selected Instructors"}
               </p>
 
               <p className="text-xs font-thin indent-8 text-justify mt-2">
