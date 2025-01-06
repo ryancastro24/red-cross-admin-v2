@@ -10,11 +10,16 @@ interface InstructorRating {
   _id: string;
   name: string;
   field: string;
-  rating1: number;
-  rating2: number;
-  rating3: number;
-  rating4: number;
-  rating5: number;
+  rate1: number;
+  rate2: number;
+  rate3: number;
+  rate4: number;
+  rate5: number;
+  userId: {
+    _id: string;
+    name: string;
+    email: string;
+  };
 }
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
@@ -56,7 +61,7 @@ const InstructorRatingDetails = () => {
           </Button>
         </div>
       ) : (
-        <div className="flex flex-col gap-5 ">
+        <div className="flex flex-col gap-5 w-full h-full ">
           <Button
             variant="light"
             className="absolute top-2 left-2"
@@ -71,44 +76,46 @@ const InstructorRatingDetails = () => {
               <Card key={val._id} className="w-full">
                 <CardHeader className="flex gap-3">
                   <div className="flex flex-col">
-                    <p className="text-md">{val.name}</p>
-                    <p className="text-small text-default-500">{val.field}</p>
+                    <p className="text-md">{val.userId.name}</p>
+                    <p className="text-small text-default-500">
+                      {val.userId.email}
+                    </p>
                   </div>
                 </CardHeader>
 
                 <CardBody className="grid grid-cols-2 gap-5">
                   <Progress
                     className="max-w-md"
-                    label="Field Number 1"
-                    value={(val.rating1 / 5) * 100}
+                    label="Ability to explain teh course material"
+                    value={(val.rate1 / 5) * 100}
                     size="sm"
                   />
 
                   <Progress
                     className="max-w-md"
-                    label="Field Number 2"
-                    value={(val.rating2 / 5) * 100}
+                    label="Engaging and intercative environment"
+                    value={(val.rate2 / 5) * 100}
                     size="sm"
                   />
 
                   <Progress
                     className="max-w-md"
-                    label="Field Number 3"
-                    value={(val.rating3 / 5) * 100}
+                    label="Effictive Trainer feedback and question handling"
+                    value={(val.rate3 / 5) * 100}
                     size="sm"
                   />
 
                   <Progress
                     className="max-w-md"
-                    label="Field Number 4"
-                    value={(val.rating4 / 5) * 100}
+                    label="Knowledgeable and confident in subject matter"
+                    value={(val.rate4 / 5) * 100}
                     size="sm"
                   />
 
                   <Progress
                     className="max-w-md"
-                    label="Field Number 5"
-                    value={(val.rating5 / 5) * 100}
+                    label="Adhere course objective and training schedule"
+                    value={(val.rate5 / 5) * 100}
                     size="sm"
                   />
                 </CardBody>

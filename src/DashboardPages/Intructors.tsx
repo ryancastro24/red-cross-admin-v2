@@ -33,7 +33,7 @@ const InstructorPage = () => {
               <CardBody className="grid grid-cols-2 gap-5">
                 <Progress
                   className="max-w-md"
-                  label="Field Number 1"
+                  label="Ability to explain teh course material"
                   value={
                     (val.totals.rate1Total /
                       (val.totals.ratingTotalCount * 5)) *
@@ -44,7 +44,7 @@ const InstructorPage = () => {
 
                 <Progress
                   className="max-w-md"
-                  label="Field Number 2"
+                  label="Engaging and intercative environment"
                   value={
                     (val.totals.rate2Total /
                       (val.totals.ratingTotalCount * 5)) *
@@ -55,7 +55,7 @@ const InstructorPage = () => {
 
                 <Progress
                   className="max-w-md"
-                  label="Field Number 3"
+                  label="Effictive Trainer feedback and question handling"
                   value={
                     (val.totals.rate3Total /
                       (val.totals.ratingTotalCount * 5)) *
@@ -66,7 +66,7 @@ const InstructorPage = () => {
 
                 <Progress
                   className="max-w-md"
-                  label="Field Number 4"
+                  label="Knowledgeable and confident in subject matter"
                   value={
                     (val.totals.rate4Total /
                       (val.totals.ratingTotalCount * 5)) *
@@ -77,7 +77,7 @@ const InstructorPage = () => {
 
                 <Progress
                   className="max-w-md"
-                  label="Field Number 5"
+                  label="Adhere course objective and training schedule"
                   value={
                     (val.totals.rate5Total /
                       (val.totals.ratingTotalCount * 5)) *
