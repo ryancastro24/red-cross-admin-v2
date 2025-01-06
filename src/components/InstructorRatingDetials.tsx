@@ -20,7 +20,7 @@ interface InstructorRating {
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const id = params.id; // Get the instructor ID from params
   const instructorRatings = await getInstructorRatings(id); // Fetch instructor ratings
-
+  console.log(instructorRatings);
   return { instructorRatings };
 };
 
@@ -56,53 +56,66 @@ const InstructorRatingDetails = () => {
           </Button>
         </div>
       ) : (
-        instructorRatings.map((val) => (
-          <Card key={val._id} className="w-full">
-            <CardHeader className="flex gap-3">
-              <div className="flex flex-col">
-                <p className="text-md">{val.name}</p>
-                <p className="text-small text-default-500">{val.field}</p>
-              </div>
-            </CardHeader>
+        <div className="flex flex-col gap-5 ">
+          <Button
+            variant="light"
+            className="absolute top-2 left-2"
+            color="primary"
+            onPress={() => navigate(-1)} // Navigate to the previous page
+          >
+            GO BACK
+          </Button>
 
-            <CardBody className="grid grid-cols-2 gap-5">
-              <Progress
-                className="max-w-md"
-                label="Field Number 1"
-                value={(val.rating1 / 5) * 100}
-                size="sm"
-              />
+          <div className="grid grid-cols-2">
+            {instructorRatings.map((val) => (
+              <Card key={val._id} className="w-full">
+                <CardHeader className="flex gap-3">
+                  <div className="flex flex-col">
+                    <p className="text-md">{val.name}</p>
+                    <p className="text-small text-default-500">{val.field}</p>
+                  </div>
+                </CardHeader>
 
-              <Progress
-                className="max-w-md"
-                label="Field Number 2"
-                value={(val.rating2 / 5) * 100}
-                size="sm"
-              />
+                <CardBody className="grid grid-cols-2 gap-5">
+                  <Progress
+                    className="max-w-md"
+                    label="Field Number 1"
+                    value={(val.rating1 / 5) * 100}
+                    size="sm"
+                  />
 
-              <Progress
-                className="max-w-md"
-                label="Field Number 3"
-                value={(val.rating3 / 5) * 100}
-                size="sm"
-              />
+                  <Progress
+                    className="max-w-md"
+                    label="Field Number 2"
+                    value={(val.rating2 / 5) * 100}
+                    size="sm"
+                  />
 
-              <Progress
-                className="max-w-md"
-                label="Field Number 4"
-                value={(val.rating4 / 5) * 100}
-                size="sm"
-              />
+                  <Progress
+                    className="max-w-md"
+                    label="Field Number 3"
+                    value={(val.rating3 / 5) * 100}
+                    size="sm"
+                  />
 
-              <Progress
-                className="max-w-md"
-                label="Field Number 5"
-                value={(val.rating5 / 5) * 100}
-                size="sm"
-              />
-            </CardBody>
-          </Card>
-        ))
+                  <Progress
+                    className="max-w-md"
+                    label="Field Number 4"
+                    value={(val.rating4 / 5) * 100}
+                    size="sm"
+                  />
+
+                  <Progress
+                    className="max-w-md"
+                    label="Field Number 5"
+                    value={(val.rating5 / 5) * 100}
+                    size="sm"
+                  />
+                </CardBody>
+              </Card>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );
