@@ -52,6 +52,30 @@ const gender: Option[] = [
 const address: Option[] = [
   { value: "ALFONSO", label: "ALFONSO" },
   { value: "AMADEO", label: "AMADEO" },
+  { value: "BACOOR CITY", label: "BACOOR CITY" },
+  { value: "CARMONA", label: "CARMONA" },
+  { value: "CAVITY CITY", label: "CAVITY CITY" },
+  { value: "CITY OF DASMARIÑAS", label: "CITY OF DASMARIÑAS" },
+  { value: "GEN. MARIANO ALVAREZ", label: "GEN. MARIANO ALVAREZ" },
+  { value: "GENERAL EMILIO AGUINALDO", label: "GENERAL EMILIO AGUINALDO" },
+  { value: "GENERAL TRIAS", label: "GENERAL TRIAS" },
+  { value: "IMUS CITY", label: "IMUS CITY" },
+  { value: "INDANG", label: "INDANG" },
+  { value: "KAWIT", label: "KAWIT" },
+  { value: "MAGALLANES", label: "MAGALLANES" },
+  { value: "MARAGONDON", label: "MARAGONDON" },
+  { value: "MENDEZ (MENDEZ-NUÑEZ)", label: "MENDEZ (MENDEZ-NUÑEZ)" },
+  { value: "NAIC", label: "NAIC" },
+  { value: "NOVELETA", label: "NOVELETA" },
+  { value: "ROSARIO", label: "ROSARIO" },
+  { value: "SILANG", label: "SILANG" },
+  { value: "TAGAYTAY CITY", label: "TAGAYTAY CITY" },
+  { value: "TANZA", label: "TANZA" },
+  { value: "TERNATE", label: "TERNATE" },
+  {
+    value: "TRECE MARTIRES CITY (CAPITAL)",
+    label: "TRECE MARTIRES CITY (CAPITAL)",
+  },
   // ... (rest of the address list)
 ];
 
