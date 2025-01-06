@@ -21,7 +21,7 @@ import CertificateContainer from "@/components/CertificateContainer";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { updateUserCertificateUrl } from "@/backendapi/user";
-import { select, Select, SelectItem } from "@nextui-org/react";
+import { Select, SelectItem } from "@nextui-org/react";
 import { instructors } from "@/libs/instructors";
 export async function action({ request }: any) {
   const formData = await request.formData();
