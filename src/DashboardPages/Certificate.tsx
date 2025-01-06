@@ -21,6 +21,8 @@ import CertificateContainer from "@/components/CertificateContainer";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { updateUserCertificateUrl } from "@/backendapi/user";
+import { Select, SelectItem } from "@nextui-org/react";
+import { instructors } from "@/libs/instructors";
 export async function action({ request }: any) {
   const formData = await request.formData();
   const data: Record<string, FormDataEntryValue> = Object.fromEntries(
@@ -57,6 +59,13 @@ type Users = {
 };
 
 const Certificate = () => {
+  const [instructorsData, setInstructorsData] = useState<Selection>(
+    new Set([])
+  );
+
+  console.log("instrutors set", instructors);
+  console.log("instructors to array", Array.from(instructors));
+  console.log("array to string converted", Array.from(instructors).toString());
   const { users } = useLoaderData() as Users;
   const navigation = useNavigation();
   // State to store the selected name
@@ -228,6 +237,19 @@ const Certificate = () => {
               </p>
             )}
           </div>
+
+          <Select
+            className="max-w-xs"
+            label="Instructors"
+            placeholder="Select Instructors"
+            selectedKeys={instructorsData}
+            selectionMode="multiple"
+            onSelectionChange={setInstructorsData}
+          >
+            {instructors.map((val) => (
+              <SelectItem key={val.key}>{val.label}</SelectItem>
+            ))}
+          </Select>
           <Form
             method="POST"
             className="flex flex-col gap-5"
