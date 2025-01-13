@@ -273,6 +273,7 @@ const Certificate = () => {
 
             <div className="flex justify-center items-center gap-4">
               <Button
+                disabled={selectedUser?.name === ""}
                 onClick={handleDownload}
                 color="secondary"
                 variant="shadow"

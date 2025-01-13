@@ -173,7 +173,7 @@ const Archives = () => {
   return (
     <div className="flex flex-col gap-5">
       <h2>Archives</h2>
-      <div>
+      <div className="flex items-start gap-5 justify-start">
         {Object.keys(groupedUsers).map((date) => (
           <Button onClick={() => handleDownload(date, groupedUsers[date])}>
             {date}

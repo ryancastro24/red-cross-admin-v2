@@ -317,12 +317,17 @@ export default function DataTable() {
 
     const storedKeys = localStorage.getItem("selectedKeys");
     const formData = new FormData();
+
     // Convert Set to Array and then to a JSON string
     formData.append("selectedUsers", JSON.stringify(storedKeys));
 
     // Programmatically submit the formData
     submit(formData, { method: "post" });
+
+    // Remove selectedKeys from local storage
+    localStorage.removeItem("selectedKeys");
   };
+
   const handleEditUser = (data: User) => {
     onOpen();
     setSelectedUser(data);
