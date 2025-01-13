@@ -277,8 +277,9 @@ const Certificate = () => {
                 color="secondary"
                 variant="shadow"
                 disabled={
-                  !selectedUser?.name ||
-                  (instructorsData instanceof Set && instructorsData.size === 0)
+                  !selectedUser || // If no user is selected
+                  !selectedUser?.name || // If no name is available for the selected user
+                  (instructorsData instanceof Set && instructorsData.size === 0) // If no instructors are selected
                 }
               >
                 Download Certificate
