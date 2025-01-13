@@ -553,8 +553,7 @@ export default function DataTable() {
             <Form method="POST" onSubmit={(e) => e.preventDefault()}>
               <Button
                 isDisabled={
-                  selectedKeys === "all" ||
-                  (selectedKeys instanceof Set && selectedKeys.size === 0)
+                  selectedKeys instanceof Set && selectedKeys.size === 0
                 }
                 onClick={handleSubmit}
                 type="button"
