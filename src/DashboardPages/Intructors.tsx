@@ -26,7 +26,7 @@ const InstructorPage = () => {
               <CardHeader className="flex gap-3">
                 <div className="flex flex-col">
                   <p className="text-md">{val.name}</p>
-                  <p className="text-small text-default-500">nextui.org</p>
+                  <p className="text-small text-default-500">{val.field}</p>
                 </div>
               </CardHeader>
 

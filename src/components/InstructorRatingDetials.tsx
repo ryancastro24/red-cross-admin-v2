@@ -65,6 +65,7 @@ const InstructorRatingDetails = () => {
           <div className="flex flex-col gap-5 w-full h-full ">
             <div className="flex flex-col gap-3">
               <Button
+                className="w-[130px]"
                 variant="light"
                 color="primary"
                 onPress={() => navigate(-1)} // Navigate to the previous page
