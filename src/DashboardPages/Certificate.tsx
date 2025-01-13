@@ -276,6 +276,10 @@ const Certificate = () => {
                 onClick={handleDownload}
                 color="secondary"
                 variant="shadow"
+                disabled={
+                  !selectedUser?.name ||
+                  (instructorsData instanceof Set && instructorsData.size === 0)
+                }
               >
                 Download Certificate
               </Button>
