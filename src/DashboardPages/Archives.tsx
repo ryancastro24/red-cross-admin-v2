@@ -1,7 +1,6 @@
-import { Accordion, AccordionItem } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { useMemo } from "react";
 import { User } from "@nextui-org/user";
-import { Divider } from "@nextui-org/react";
 import { getAllApprovedUsersData } from "@/backendapi/user";
 import { useLoaderData } from "react-router-dom";
 import jsPDF from "jspdf";
@@ -175,8 +174,10 @@ const Archives = () => {
     <div className="flex flex-col gap-5">
       <h2>Archives</h2>
       <div>
-        {Object.keys(groupedUsers).map((date, index) => (
-          <h1>{date}</h1>
+        {Object.keys(groupedUsers).map((date) => (
+          <Button onClick={() => handleDownload(date, groupedUsers[date])}>
+            {date}
+          </Button>
         ))}
       </div>
     </div>
