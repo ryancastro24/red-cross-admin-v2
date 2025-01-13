@@ -174,59 +174,11 @@ const Archives = () => {
   return (
     <div className="flex flex-col gap-5">
       <h2>Archives</h2>
-      <Accordion>
+      <div>
         {Object.keys(groupedUsers).map((date, index) => (
-          <AccordionItem
-            key={index}
-            aria-label={`Accordion ${index + 1}`}
-            title={
-              <div className="flex justify-between items-center w-full">
-                <span>{date}</span>
-                <button
-                  className="text-blue-500 hover:underline"
-                  onClick={() => handleDownload(date, groupedUsers[date])}
-                >
-                  Download Report
-                </button>
-              </div>
-            }
-          >
-            {/* Nested Accordion for each user */}
-            <Accordion>
-              {groupedUsers[date].map((user) => (
-                <AccordionItem
-                  key={user._id}
-                  aria-label={user.name}
-                  title={user.name}
-                >
-                  <div className="flex flex-col gap-5">
-                    <User
-                      avatarProps={{
-                        src: user.profilePictureUrl,
-                      }}
-                      description={user.email}
-                      name={user.name}
-                    />
-                    <ul className="flex justify-center gap-1 w-full flex-wrap">
-                      <li>Address: {user.address}</li>
-                      <Divider orientation="vertical" />
-                      <li>Contact: {user.contact}</li>
-                      <Divider orientation="vertical" />
-                      <li>Category: {user.category}</li>
-                      <Divider orientation="vertical" />
-                      <li>OR Number: {user.orNumber}</li>
-                      <Divider orientation="vertical" />
-                      <li>Gender: {user.gender}</li>
-                      <Divider orientation="vertical" />
-                      <li>Started: {user.dateStarted}</li>
-                    </ul>
-                  </div>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </AccordionItem>
+          <h1>{date}</h1>
         ))}
-      </Accordion>
+      </div>
     </div>
   );
 };

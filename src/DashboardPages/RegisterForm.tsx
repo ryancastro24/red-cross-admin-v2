@@ -175,7 +175,7 @@ const RegisterForm: React.FC = () => {
           encType="multipart/form-data"
         >
           <div>
-            <Input required name="orNumber" label="OR Number" type="text" />
+            <Input required name="orNumber" label="OR Number" type="number" />
           </div>
           <div>
             <Input required name="name" label="Name" type="text" />
@@ -217,7 +217,7 @@ const RegisterForm: React.FC = () => {
             </Select>
           </div>
           <div>
-            <Input required name="contact" label="Contact" type="text" />
+            <Input required name="contact" label="Contact" type="number" />
           </div>
           <div>
             <Input required name="file" label="Upload Image" type="file" />
