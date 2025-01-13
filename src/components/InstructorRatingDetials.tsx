@@ -88,7 +88,7 @@ const InstructorRatingDetails = () => {
 
                   <CardBody className="w-full flex flex-col gap-3">
                     <Progress
-                      className="max-w-md"
+                      className="w-full"
                       label="Ability to explain teh course material"
                       value={(val.rate1 / 5) * 100}
                       size="sm"
@@ -96,7 +96,7 @@ const InstructorRatingDetails = () => {
                     />
 
                     <Progress
-                      className="max-w-md"
+                      className="w-full"
                       label="Engaging and intercative environment"
                       value={(val.rate2 / 5) * 100}
                       size="sm"
@@ -104,7 +104,7 @@ const InstructorRatingDetails = () => {
                     />
 
                     <Progress
-                      className="max-w-md"
+                      className="w-full"
                       label="Effictive Trainer feedback and question handling"
                       value={(val.rate3 / 5) * 100}
                       size="sm"
@@ -112,7 +112,7 @@ const InstructorRatingDetails = () => {
                     />
 
                     <Progress
-                      className="max-w-md"
+                      className="w-full"
                       label="Knowledgeable and confident in subject matter"
                       value={(val.rate4 / 5) * 100}
                       size="sm"
@@ -120,7 +120,7 @@ const InstructorRatingDetails = () => {
                     />
 
                     <Progress
-                      className="max-w-md"
+                      className="w-full"
                       label="Adhere course objective and training schedule"
                       value={(val.rate5 / 5) * 100}
                       size="sm"
