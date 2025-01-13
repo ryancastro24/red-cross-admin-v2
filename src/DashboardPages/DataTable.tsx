@@ -306,13 +306,6 @@ export default function DataTable() {
 
   const [page, setPage] = React.useState(1);
 
-  const getSelectedKeysSize = (): number => {
-    if (selectedKeys instanceof Set) {
-      return selectedKeys.size;
-    }
-    // If selectedKeys is "all", assume size 0 or handle accordingly
-    return 0;
-  };
   // Update localStorage whenever selectedKeys changes
   useEffect(() => {
     const selectedKeysArray = Array.from(selectedKeys); // Convert Set to Array
@@ -558,12 +551,7 @@ export default function DataTable() {
             </Dropdown>
 
             <Form method="POST" onSubmit={(e) => e.preventDefault()}>
-              <Button
-                disabled={getSelectedKeysSize() === 0}
-                onClick={handleSubmit}
-                type="button"
-                color="primary"
-              >
+              <Button onClick={handleSubmit} type="button" color="primary">
                 Course Completed
               </Button>
             </Form>
