@@ -63,6 +63,7 @@ const InstructorRatingDetails = () => {
       ) : (
         <>
           <div className="flex flex-col gap-5 w-full h-full ">
+            <h1 className="text-2xl">Available Instructor Ratings</h1>
             <Button
               variant="light"
               className="absolute top-2 left-2"
