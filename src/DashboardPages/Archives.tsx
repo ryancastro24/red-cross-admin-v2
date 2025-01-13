@@ -5,7 +5,7 @@ import { getAllApprovedUsersData } from "@/backendapi/user";
 import { useLoaderData } from "react-router-dom";
 import jsPDF from "jspdf";
 import logo from "@/assets/redcross_logo.png";
-// Define a type for the user object
+
 interface User {
   _id: string;
   name: string;
@@ -41,7 +41,6 @@ const Archives = () => {
 
   const groupedUsers = useMemo(() => {
     return users.reduce<{ [key: string]: User[] }>((acc, user) => {
-      // Format the updatedAt date as "Month Day, Year"
       const date = new Date(user.updatedAt).toLocaleDateString("en-US", {
         month: "long",
         day: "numeric",
@@ -66,105 +65,68 @@ const Archives = () => {
     const headerYPosition = 10;
 
     // Add logo to the header
-    const logoWidth = 30; // Adjust logo width as needed
-    const logoHeight = 30; // Adjust logo height as needed
+    const logoWidth = 30;
+    const logoHeight = 30;
     doc.addImage(logoUrl, "PNG", 10, headerYPosition, logoWidth, logoHeight);
 
     // Add text to the header
     doc.setFontSize(16);
-    doc.text(headerTitle, 50, headerYPosition + 10); // Adjust the text position
+    doc.text(headerTitle, 50, headerYPosition + 10);
     doc.setFontSize(12);
     doc.text(headerSubtitle, 50, headerYPosition + 18);
     doc.text(reportDate, 50, headerYPosition + 26);
 
-    // Table starting position
-    let startX = 10;
-    let startY = 50;
+    const startY = 50;
     const rowHeight = 10;
-    const colWidths = [10, 30, 40, 50, 30, 30, 20, 30]; // Adjust column widths as needed
+    const colWidths = [40, 60, 60, 40]; // Adjust column widths for name, email, address, and category
+    const tableWidth = colWidths.reduce((a, b) => a + b, 0); // Calculate total table width
+    const centerX = (doc.internal.pageSize.width - tableWidth) / 2; // Center the table horizontally
 
     // Table header
-    const columns = [
-      "No.",
-      "Name",
-      "Email",
-      "Address",
-      "Contact",
-      "Category",
-      "Gender",
-      "Started",
-    ];
+    const columns = ["Name", "Email", "Address", "Category"];
     let currentY = startY;
 
     // Draw the header row
     doc.setFontSize(10);
     doc.setFillColor(255, 0, 0); // Red background
     doc.setTextColor(255, 255, 255); // White text
-    doc.rect(
-      startX,
-      currentY,
-      colWidths.reduce((a, b) => a + b),
-      rowHeight,
-      "F"
-    ); // Filled rectangle for header
-    let currentX = startX;
+    doc.rect(centerX, currentY, tableWidth, rowHeight, "F");
+    let currentX = centerX;
     columns.forEach((col, i) => {
-      doc.text(col, currentX + 2, currentY + 8); // Slight padding
+      doc.text(col, currentX + 2, currentY + 8);
       currentX += colWidths[i];
     });
 
     currentY += rowHeight;
 
     // Reset text color for rows
-    doc.setTextColor(0, 0, 0); // Black text
+    doc.setTextColor(0, 0, 0);
 
     // Draw data rows
     users.forEach((user, index) => {
-      currentX = startX;
-      const row = [
-        `${index + 1}`,
-        user.name,
-        user.email,
-        user.address,
-        user.contact,
-        user.category,
-        user.gender,
-        user.dateStarted,
-      ];
+      currentX = centerX;
+      const row = [user.name, user.email, user.address, user.category];
 
       // Stripe the rows
       if (index % 2 === 0) {
         doc.setFillColor(240, 240, 240); // Light gray background for striped rows
-        doc.rect(
-          startX,
-          currentY,
-          colWidths.reduce((a, b) => a + b),
-          rowHeight,
-          "F"
-        );
+        doc.rect(centerX, currentY, tableWidth, rowHeight, "F");
       }
 
       row.forEach((cell, i) => {
-        doc.text(cell, currentX + 2, currentY + 8); // Slight padding
+        doc.text(cell, currentX + 2, currentY + 8);
         currentX += colWidths[i];
       });
 
-      // Draw row border
       currentY += rowHeight;
       if (currentY > 280) {
-        // Add new page if content overflows
         doc.addPage();
         currentY = startY;
       }
     });
 
     // Final bottom border for the table
-    doc.line(
-      startX,
-      currentY,
-      startX + colWidths.reduce((a, b) => a + b),
-      currentY
-    );
+    doc.line(centerX, currentY, centerX + tableWidth, currentY);
 
     // Save the PDF
     doc.save(`User_Report_${date.replace(/ /g, "_")}.pdf`);
