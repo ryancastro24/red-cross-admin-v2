@@ -326,6 +326,9 @@ export default function DataTable() {
 
     // Remove selectedKeys from local storage
     localStorage.removeItem("selectedKeys");
+
+    // Optionally reset the state
+    setSelectedKeys(new Set());
   };
 
   const handleEditUser = (data: User) => {
