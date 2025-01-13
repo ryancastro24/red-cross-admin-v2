@@ -551,14 +551,7 @@ export default function DataTable() {
             </Dropdown>
 
             <Form method="POST" onSubmit={(e) => e.preventDefault()}>
-              <Button
-                isDisabled={
-                  selectedKeys instanceof Set && selectedKeys.size === 0
-                }
-                onClick={handleSubmit}
-                type="button"
-                color="primary"
-              >
+              <Button onClick={handleSubmit} type="button" color="primary">
                 Course Completed
               </Button>
             </Form>
