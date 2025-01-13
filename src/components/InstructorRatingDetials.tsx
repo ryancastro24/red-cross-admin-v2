@@ -64,6 +64,7 @@ const InstructorRatingDetails = () => {
         <>
           <div className="flex flex-col gap-5 w-full h-full ">
             <Button
+              className="w-[100px]"
               variant="light"
               color="primary"
               onPress={() => navigate(-1)} // Navigate to the previous page
@@ -73,14 +74,6 @@ const InstructorRatingDetails = () => {
             <h1 className="">Available Instructor Ratings</h1>
 
             <div className="grid grid-cols-2 gap-4">
-              <Button
-                variant="light"
-                className="absolute top-2 left-2"
-                color="primary"
-                onPress={() => navigate(-1)} // Navigate to the previous page
-              >
-                GO BACK
-              </Button>
               {instructorRatings.map((val) => (
                 <Card key={val._id} className="w-full">
                   <CardHeader className="flex gap-3">
