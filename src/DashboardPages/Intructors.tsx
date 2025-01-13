@@ -40,6 +40,7 @@ const InstructorPage = () => {
                     100
                   }
                   size="sm"
+                  showValueLabel={true}
                 />
 
                 <Progress
@@ -51,6 +52,7 @@ const InstructorPage = () => {
                     100
                   }
                   size="sm"
+                  showValueLabel={true}
                 />
 
                 <Progress
@@ -62,6 +64,7 @@ const InstructorPage = () => {
                     100
                   }
                   size="sm"
+                  showValueLabel={true}
                 />
 
                 <Progress
@@ -73,6 +76,7 @@ const InstructorPage = () => {
                     100
                   }
                   size="sm"
+                  showValueLabel={true}
                 />
 
                 <Progress
@@ -84,6 +88,7 @@ const InstructorPage = () => {
                     100
                   }
                   size="sm"
+                  showValueLabel={true}
                 />
               </CardBody>
             </Card>

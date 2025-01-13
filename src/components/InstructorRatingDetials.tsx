@@ -63,15 +63,16 @@ const InstructorRatingDetails = () => {
       ) : (
         <>
           <div className="flex flex-col gap-5 w-full h-full ">
-            <Button
-              className="w-[100px]"
-              variant="light"
-              color="primary"
-              onPress={() => navigate(-1)} // Navigate to the previous page
-            >
-              GO BACK
-            </Button>
-            <h1 className="">Available Instructor Ratings</h1>
+            <div className="flex flex-col gap-3">
+              <Button
+                variant="light"
+                color="primary"
+                onPress={() => navigate(-1)} // Navigate to the previous page
+              >
+                GO BACK
+              </Button>
+              <h1 className="">Available Instructor Ratings</h1>
+            </div>
 
             <div className="grid grid-cols-2 gap-4">
               {instructorRatings.map((val) => (
@@ -91,6 +92,7 @@ const InstructorRatingDetails = () => {
                       label="Ability to explain teh course material"
                       value={(val.rate1 / 5) * 100}
                       size="sm"
+                      showValueLabel={true}
                     />
 
                     <Progress
@@ -98,6 +100,7 @@ const InstructorRatingDetails = () => {
                       label="Engaging and intercative environment"
                       value={(val.rate2 / 5) * 100}
                       size="sm"
+                      showValueLabel={true}
                     />
 
                     <Progress
@@ -105,6 +108,7 @@ const InstructorRatingDetails = () => {
                       label="Effictive Trainer feedback and question handling"
                       value={(val.rate3 / 5) * 100}
                       size="sm"
+                      showValueLabel={true}
                     />
 
                     <Progress
@@ -112,6 +116,7 @@ const InstructorRatingDetails = () => {
                       label="Knowledgeable and confident in subject matter"
                       value={(val.rate4 / 5) * 100}
                       size="sm"
+                      showValueLabel={true}
                     />
 
                     <Progress
@@ -119,6 +124,7 @@ const InstructorRatingDetails = () => {
                       label="Adhere course objective and training schedule"
                       value={(val.rate5 / 5) * 100}
                       size="sm"
+                      showValueLabel={true}
                     />
                   </CardBody>
                 </Card>
