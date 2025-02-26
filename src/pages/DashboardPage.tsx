@@ -82,6 +82,19 @@ const Dashboard = () => {
             } flex items-center gap-2 text-white px-2 py-3 rounded cursor-pointer`}
             to={"/dashboard"}
           >
+            <span className="text-lg">
+              <IoMdAnalytics />
+            </span>
+            <span>Analytics</span>
+          </Link>
+
+          <Link
+            onClick={() => setNavigation("register")}
+            className={`hover:bg-red-600 ${
+              navigation === "register" ? "bg-red-600" : ""
+            } flex items-center gap-2 text-white px-2 py-3 rounded cursor-pointer`}
+            to={"register"}
+          >
             <span className="text-xl">
               <TiUserAdd />
             </span>
@@ -98,19 +111,6 @@ const Dashboard = () => {
               <PiUsersThreeFill />
             </span>
             <span>Users</span>
-          </Link>
-
-          <Link
-            onClick={() => setNavigation("analytics")}
-            className={`hover:bg-red-600 ${
-              navigation === "analytics" ? "bg-red-600" : ""
-            } flex items-center gap-2 text-white px-2 py-3 rounded cursor-pointer`}
-            to={"analytics"}
-          >
-            <span className="text-lg">
-              <IoMdAnalytics />
-            </span>
-            <span>Analytics</span>
           </Link>
 
           <Link

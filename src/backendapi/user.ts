@@ -1,3 +1,4 @@
+const apiUrl = import.meta.env.VITE_API_URL;
 export type UserType = {
   name: string;
   address: string;
@@ -11,14 +12,11 @@ export type UserType = {
 // REGISTER USER
 export async function registerUser(formData: FormData) {
   try {
-    const response = await fetch(
-      "https://red-cross-api-final.onrender.com/register",
-      {
-        method: "POST",
-        credentials: "include", // Include cookies in the request
-        body: formData, // Send FormData as the body of the request
-      }
-    );
+    const response = await fetch(`${apiUrl}/register`, {
+      method: "POST",
+      credentials: "include", // Include cookies in the request
+      body: formData, // Send FormData as the body of the request
+    });
 
     if (response.ok) {
       const result = await response.json();
@@ -34,12 +32,9 @@ export async function registerUser(formData: FormData) {
 
 export async function getUsersData() {
   try {
-    const response = await fetch(
-      "https://red-cross-api-final.onrender.com/api/user",
-      {
-        credentials: "include", // Include cookies in the request
-      }
-    );
+    const response = await fetch(`${apiUrl}/api/user`, {
+      credentials: "include", // Include cookies in the request
+    });
 
     if (response.ok) {
       const result = await response.json();
@@ -55,12 +50,9 @@ export async function getUsersData() {
 // get all user cert to be uploaded
 export async function getUsersCertToBeUpload() {
   try {
-    const response = await fetch(
-      "https://red-cross-api-final.onrender.com/api/user/getAllUserCerToBeUpload",
-      {
-        credentials: "include", // Include cookies in the request
-      }
-    );
+    const response = await fetch(`${apiUrl}/api/user/getAllUserCerToBeUpload`, {
+      credentials: "include", // Include cookies in the request
+    });
 
     if (response.ok) {
       const result = await response.json();
@@ -77,12 +69,9 @@ export async function getUsersCertToBeUpload() {
 
 export async function getAllApprovedUsersData() {
   try {
-    const response = await fetch(
-      "https://red-cross-api-final.onrender.com/api/user/approvedUser",
-      {
-        credentials: "include", // Include cookies in the request
-      }
-    );
+    const response = await fetch(`${apiUrl}/api/user/approvedUser`, {
+      credentials: "include", // Include cookies in the request
+    });
 
     if (response.ok) {
       const result = await response.json();
@@ -100,17 +89,14 @@ export async function updateUserData(formData: UserType, id: string) {
   console.log("i was called");
 
   try {
-    const response = await fetch(
-      `https://red-cross-api-final.onrender.com/api/user/${id}`,
-      {
-        method: "PUT",
-        credentials: "include", // Include cookies in the request
-        headers: {
-          "Content-Type": "application/json", // This tells the server the body is JSON
-        },
-        body: JSON.stringify(formData), // Send FormData as the body of the request
-      }
-    );
+    const response = await fetch(`${apiUrl}/api/user/${id}`, {
+      method: "PUT",
+      credentials: "include", // Include cookies in the request
+      headers: {
+        "Content-Type": "application/json", // This tells the server the body is JSON
+      },
+      body: JSON.stringify(formData), // Send FormData as the body of the request
+    });
 
     if (response.ok) {
       const result = await response.json();
@@ -129,16 +115,13 @@ export async function deleteUserData(id: string) {
   console.log("Delete request initiated for user ID:", id);
 
   try {
-    const response = await fetch(
-      `https://red-cross-api-final.onrender.com/api/user/${id}`,
-      {
-        method: "DELETE",
-        credentials: "include", // Include cookies in the request// Change method to DELETE
-        headers: {
-          "Content-Type": "application/json", // Optional, but good practice
-        },
-      }
-    );
+    const response = await fetch(`${apiUrl}/api/user/${id}`, {
+      method: "DELETE",
+      credentials: "include", // Include cookies in the request// Change method to DELETE
+      headers: {
+        "Content-Type": "application/json", // Optional, but good practice
+      },
+    });
 
     if (response.ok) {
       const result = await response.json();
@@ -157,7 +140,7 @@ export async function deleteUserData(id: string) {
 export async function updateUserCertificates(userIds: any) {
   try {
     const response = await fetch(
-      `https://red-cross-api-final.onrender.com/api/user/updatecerts/update`,
+      `${apiUrl}/api/user/updatecerts/update`,
 
       {
         method: "PUT", // Use PUT for updating resources
@@ -188,7 +171,7 @@ export async function updateUserCertificates(userIds: any) {
 export async function updateUserCertificateUrl(formData: FormData, id: any) {
   try {
     const response = await fetch(
-      `https://red-cross-api-final.onrender.com/updateUserCertificateUrl/${id}`,
+      `${apiUrl}/updateUserCertificateUrl/${id}`,
 
       {
         method: "PUT",

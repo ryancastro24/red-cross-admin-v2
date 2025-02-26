@@ -1,7 +1,8 @@
+const apiUrl = import.meta.env.VITE_API_URL;
 export async function getInstructorRatings(id: string | undefined) {
   try {
     const response = await fetch(
-      `https://red-cross-api-final.onrender.com/api/ratings/getInstructorRatings/${id}`,
+      `${apiUrl}/api/ratings/getInstructorRatings/${id}`,
       {
         credentials: "include", // Include cookies in the request
       }

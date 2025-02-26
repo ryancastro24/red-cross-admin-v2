@@ -56,6 +56,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard",
+        element: <Analytics />,
+        loader: analyticsLoader,
+      },
+      {
+        path: "register",
         element: <RegisterForm />,
         action: registerAction,
       },
@@ -71,12 +76,6 @@ const router = createBrowserRouter([
             action: destroyUserAction,
           },
         ],
-      },
-
-      {
-        path: "analytics",
-        element: <Analytics />,
-        loader: analyticsLoader,
       },
 
       {

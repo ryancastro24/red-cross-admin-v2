@@ -1,8 +1,7 @@
+const apiUrl = import.meta.env.VITE_API_URL;
 export async function getAllDataPerMonth() {
   try {
-    const response = await fetch(
-      "https://red-cross-api-final.onrender.com/api/user/getAllDataPerMonth"
-    );
+    const response = await fetch(`${apiUrl}/api/user/getAllDataPerMonth`);
 
     if (response.ok) {
       const result = await response.json();
@@ -18,7 +17,7 @@ export async function getAllDataPerMonth() {
 export async function getAllCities() {
   try {
     const response = await fetch(
-      "https://red-cross-api-final.onrender.com/api/user/getAllCities"
+      `${apiUrl}https://red-cross-api-final.onrender.com/api/user/getAllCities`
     );
 
     if (response.ok) {
@@ -34,12 +33,9 @@ export async function getAllCities() {
 
 export async function getAllGenders() {
   try {
-    const response = await fetch(
-      "https://red-cross-api-final.onrender.com/api/user/getAllGenders",
-      {
-        credentials: "include",
-      }
-    );
+    const response = await fetch(`${apiUrl}/api/user/getAllGenders`, {
+      credentials: "include",
+    });
 
     if (response.ok) {
       const result = await response.json();

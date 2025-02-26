@@ -3,7 +3,7 @@ import { Input } from "@nextui-org/input";
 import { DatePicker } from "@nextui-org/date-picker";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Button } from "@nextui-org/button";
-import { Form, useNavigation, useActionData, Link } from "react-router-dom";
+import { Link, useFetcher } from "react-router-dom";
 import { registerUser } from "@/backendapi/user";
 import { Alert } from "@nextui-org/alert";
 import userProfile from "@/assets/userprofile.png";
@@ -83,12 +83,15 @@ const RegisterForm: React.FC = () => {
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(true);
+  const [orNumber, setOrNumber] = useState("");
+  const [error, setError] = useState("");
   // const [register, setRegister] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const navigation = useNavigation();
-  const actionData = useActionData(); // Get the result from the action
 
+  const fetcher = useFetcher();
+
+  console.log("Returned data:", fetcher.data);
   const handleOpenCamera = async (): Promise<void> => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -151,37 +154,64 @@ const RegisterForm: React.FC = () => {
 
   return (
     <div className="w-full flex flex-col gap-5">
-      {actionData !== undefined && isVisible && (
-        <Alert
-          color="success"
-          title="Successfully registered user!"
-          endContent={
-            <Link to={"/dashboard"}>
-              <Button color="success" size="sm" variant="flat">
-                Register Another
-              </Button>
-            </Link>
-          }
-          onClose={() => setIsVisible(false)}
-        />
-      )}
+      {fetcher.data?.message === "User registered successfully" &&
+        isVisible && (
+          <Alert
+            color="success"
+            title="Successfully registered user!"
+            endContent={
+              <Link to={"/dashboard"}>
+                <Button color="success" size="sm" variant="flat">
+                  Register Another
+                </Button>
+              </Link>
+            }
+            onClose={() => setIsVisible(false)}
+          />
+        )}
       <h2>Register Form</h2>
 
       <div className="w-full grid grid-cols-[1fr,400px]">
         {/* Form Inputs */}
-        <Form
+        <fetcher.Form
           method="POST"
           className="w-full grid grid-cols-2 gap-5"
           encType="multipart/form-data"
         >
           <div>
-            <Input required name="orNumber" label="OR Number" type="number" />
+            <Input
+              required
+              type="number"
+              label="OR Number"
+              name="orNumber"
+              errorMessage={error || "Or Number is already Used"}
+              isInvalid={!!error}
+              value={orNumber}
+              onChange={(e) => {
+                setOrNumber(e.target.value);
+                setError(""); // Reset error on typing
+              }}
+              onBlur={() => {
+                if (fetcher.data?.message === "Or Number is already Used") {
+                  setError(fetcher.data.message);
+                }
+              }}
+            />
           </div>
           <div>
             <Input required name="name" label="Name" type="text" />
           </div>
           <div>
-            <Input required name="email" label="Email" type="email" />
+            <Input
+              errorMessage="Email is already registered"
+              isInvalid={
+                fetcher.data?.message === "Email is already registered"
+              }
+              name="email"
+              label="Email"
+              type="email"
+              required
+            />
           </div>
           <div>
             <Input required name="password" label="Password" type="password" />
@@ -224,7 +254,7 @@ const RegisterForm: React.FC = () => {
           </div>
           <div className="cols-span-2">
             <Button
-              isLoading={navigation.state === "submitting"}
+              isLoading={fetcher.state === "submitting"}
               type="submit"
               className="w-full h-[50px] "
               color="primary"
@@ -232,7 +262,7 @@ const RegisterForm: React.FC = () => {
               SUBMIT
             </Button>
           </div>
-        </Form>
+        </fetcher.Form>
 
         <div className="w-full p-5 flex flex-col gap-5">
           {/* Camera Preview or Captured Image */}

@@ -1,8 +1,9 @@
+const apiUrl = import.meta.env.VITE_API_URL;
 export async function loginUser(data: any) {
   console.log(data);
   try {
     const response = await fetch(
-      `https://red-cross-api-final.onrender.com/api/user/loginUserWithSession/login`,
+      `${apiUrl}/api/user/loginUserWithSession/login`,
       {
         method: "POST",
         credentials: "include", // Don't forget to specify this if you need cookies
