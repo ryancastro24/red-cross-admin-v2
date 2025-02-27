@@ -2,7 +2,7 @@ export async function loginUser(data: any) {
   console.log(data);
   try {
     const response = await fetch(
-      `https://red-cross-api-final.onrender.com/api/user/loginUserWithSession/login`,
+      `https://red-cross-api-final-lgct.onrender.com/api/user/loginUserWithSession/login`,
       {
         method: "POST",
         headers: {

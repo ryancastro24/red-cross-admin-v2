@@ -12,7 +12,7 @@ export type UserType = {
 export async function registerUser(formData: FormData) {
   try {
     const response = await fetch(
-      `https://red-cross-api-final.onrender.com/register`,
+      `https://red-cross-api-final-lgct.onrender.com/register`,
       {
         method: "POST",
         // Include cookies in the reques
@@ -35,7 +35,7 @@ export async function registerUser(formData: FormData) {
 export async function getUsersData() {
   try {
     const response = await fetch(
-      `https://red-cross-api-final.onrender.com/api/user`
+      `https://red-cross-api-final-lgct.onrender.com/api/user`
     );
 
     if (response.ok) {
@@ -53,7 +53,7 @@ export async function getUsersData() {
 export async function getUsersCertToBeUpload() {
   try {
     const response = await fetch(
-      `https://red-cross-api-final.onrender.com/api/user/getAllUserCerToBeUpload`
+      `https://red-cross-api-final-lgct.onrender.com/api/user/getAllUserCerToBeUpload`
     );
 
     if (response.ok) {
@@ -72,7 +72,7 @@ export async function getUsersCertToBeUpload() {
 export async function getAllApprovedUsersData() {
   try {
     const response = await fetch(
-      `https://red-cross-api-final.onrender.com/api/user/approvedUser`
+      `https://red-cross-api-final-lgct.onrender.com/api/user/approvedUser`
     );
 
     if (response.ok) {
@@ -92,7 +92,7 @@ export async function updateUserData(formData: UserType, id: string) {
 
   try {
     const response = await fetch(
-      `https://red-cross-api-final.onrender.com/api/user/${id}`,
+      `https://red-cross-api-final-lgct.onrender.com/api/user/${id}`,
       {
         method: "PUT",
         // Include cookies in the request
@@ -121,7 +121,7 @@ export async function deleteUserData(id: string) {
 
   try {
     const response = await fetch(
-      `https://red-cross-api-final.onrender.com/api/user/${id}`,
+      `https://red-cross-api-final-lgct.onrender.com/api/user/${id}`,
       {
         method: "DELETE",
         // Include cookies in the request// Change method to DELETE
@@ -148,7 +148,7 @@ export async function deleteUserData(id: string) {
 export async function updateUserCertificates(userIds: any) {
   try {
     const response = await fetch(
-      `https://red-cross-api-final.onrender.com/api/user/updatecerts/update`,
+      `https://red-cross-api-final-lgct.onrender.com/api/user/updatecerts/update`,
 
       {
         method: "PUT", // Use PUT for updating resources
@@ -179,7 +179,7 @@ export async function updateUserCertificates(userIds: any) {
 export async function updateUserCertificateUrl(formData: FormData, id: any) {
   try {
     const response = await fetch(
-      `https://red-cross-api-final.onrender.com/updateUserCertificateUrl/${id}`,
+      `https://red-cross-api-final-lgct.onrender.com/updateUserCertificateUrl/${id}`,
 
       {
         method: "PUT",
