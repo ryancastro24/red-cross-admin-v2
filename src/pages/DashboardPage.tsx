@@ -100,7 +100,7 @@ const Dashboard = () => {
           </Link>
           <Link
             className={`hover:bg-red-600 ${
-              location.pathname === "/dashboard/users" ? "bg-red-600" : ""
+              location.pathname === "/dashboard/datatable" ? "bg-red-600" : ""
             } flex items-center gap-2 text-white px-2 py-3 rounded cursor-pointer`}
             to={"datatable"}
           >
