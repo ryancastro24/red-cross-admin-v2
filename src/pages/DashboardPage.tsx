@@ -50,6 +50,7 @@ const Dashboard = () => {
   const handleLogout = () => {
     // Remove the session_token from localStorage
     localStorage.removeItem("session_token");
+    localStorage.removeItem("userType");
 
     // Navigate to the login page
     navigate("/");

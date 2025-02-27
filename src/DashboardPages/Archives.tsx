@@ -137,7 +137,10 @@ const Archives = () => {
       <h2>Archives</h2>
       <div className="grid grid-cols-6 gap-3">
         {Object.keys(groupedUsers).map((date) => (
-          <Button onClick={() => handleDownload(date, groupedUsers[date])}>
+          <Button
+            key={date}
+            onClick={() => handleDownload(date, groupedUsers[date])}
+          >
             {date}
           </Button>
         ))}
