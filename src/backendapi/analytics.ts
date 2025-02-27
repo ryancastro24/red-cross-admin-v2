@@ -16,9 +16,7 @@ export async function getAllDataPerMonth() {
 
 export async function getAllCities() {
   try {
-    const response = await fetch(
-      `${apiUrl}https://red-cross-api-final.onrender.com/api/user/getAllCities`
-    );
+    const response = await fetch(`${apiUrl}/api/user/getAllCities`);
 
     if (response.ok) {
       const result = await response.json();
