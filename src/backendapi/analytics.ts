@@ -31,9 +31,7 @@ export async function getAllCities() {
 
 export async function getAllGenders() {
   try {
-    const response = await fetch(`${apiUrl}/api/user/getAllGenders`, {
-      credentials: "include",
-    });
+    const response = await fetch(`${apiUrl}/api/user/getAllGenders`, {});
 
     if (response.ok) {
       const result = await response.json();

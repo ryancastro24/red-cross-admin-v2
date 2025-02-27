@@ -2,10 +2,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 export async function getInstructorRatings(id: string | undefined) {
   try {
     const response = await fetch(
-      `${apiUrl}/api/ratings/getInstructorRatings/${id}`,
-      {
-        credentials: "include", // Include cookies in the request
-      }
+      `${apiUrl}/api/ratings/getInstructorRatings/${id}`
     );
 
     if (response.ok) {

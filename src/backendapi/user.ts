@@ -14,7 +14,7 @@ export async function registerUser(formData: FormData) {
   try {
     const response = await fetch(`${apiUrl}/register`, {
       method: "POST",
-      credentials: "include", // Include cookies in the request
+      // Include cookies in the reques
       body: formData, // Send FormData as the body of the request
     });
 
@@ -32,9 +32,7 @@ export async function registerUser(formData: FormData) {
 
 export async function getUsersData() {
   try {
-    const response = await fetch(`${apiUrl}/api/user`, {
-      credentials: "include", // Include cookies in the request
-    });
+    const response = await fetch(`${apiUrl}/api/user`);
 
     if (response.ok) {
       const result = await response.json();
@@ -50,9 +48,7 @@ export async function getUsersData() {
 // get all user cert to be uploaded
 export async function getUsersCertToBeUpload() {
   try {
-    const response = await fetch(`${apiUrl}/api/user/getAllUserCerToBeUpload`, {
-      credentials: "include", // Include cookies in the request
-    });
+    const response = await fetch(`${apiUrl}/api/user/getAllUserCerToBeUpload`);
 
     if (response.ok) {
       const result = await response.json();
@@ -69,9 +65,7 @@ export async function getUsersCertToBeUpload() {
 
 export async function getAllApprovedUsersData() {
   try {
-    const response = await fetch(`${apiUrl}/api/user/approvedUser`, {
-      credentials: "include", // Include cookies in the request
-    });
+    const response = await fetch(`${apiUrl}/api/user/approvedUser`);
 
     if (response.ok) {
       const result = await response.json();
@@ -91,7 +85,7 @@ export async function updateUserData(formData: UserType, id: string) {
   try {
     const response = await fetch(`${apiUrl}/api/user/${id}`, {
       method: "PUT",
-      credentials: "include", // Include cookies in the request
+      // Include cookies in the request
       headers: {
         "Content-Type": "application/json", // This tells the server the body is JSON
       },
@@ -117,7 +111,7 @@ export async function deleteUserData(id: string) {
   try {
     const response = await fetch(`${apiUrl}/api/user/${id}`, {
       method: "DELETE",
-      credentials: "include", // Include cookies in the request// Change method to DELETE
+      // Include cookies in the request// Change method to DELETE
       headers: {
         "Content-Type": "application/json", // Optional, but good practice
       },
@@ -144,7 +138,7 @@ export async function updateUserCertificates(userIds: any) {
 
       {
         method: "PUT", // Use PUT for updating resources
-        credentials: "include", // Include cookies in the request
+        // Include cookies in the request
         headers: {
           "Content-Type": "application/json", // Specify JSON content
         },
@@ -175,7 +169,7 @@ export async function updateUserCertificateUrl(formData: FormData, id: any) {
 
       {
         method: "PUT",
-        credentials: "include", // Include cookies in the request
+
         body: formData, // Send FormData as the body of the request
       }
     );

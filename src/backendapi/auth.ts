@@ -6,7 +6,7 @@ export async function loginUser(data: any) {
       `${apiUrl}/api/user/loginUserWithSession/login`,
       {
         method: "POST",
-        credentials: "include", // Don't forget to specify this if you need cookies
+
         headers: {
           "Content-Type": "application/json", // Explicitly set JSON content type
         },
