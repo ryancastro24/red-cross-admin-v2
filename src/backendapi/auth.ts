@@ -1,12 +1,10 @@
-const apiUrl = import.meta.env.VITE_API_URL;
 export async function loginUser(data: any) {
   console.log(data);
   try {
     const response = await fetch(
-      `${apiUrl}/api/user/loginUserWithSession/login`,
+      `https://red-cross-api-final.onrender.com/api/user/loginUserWithSession/login`,
       {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json", // Explicitly set JSON content type
         },

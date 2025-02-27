@@ -1,8 +1,7 @@
-const apiUrl = import.meta.env.VITE_API_URL;
 export async function getInstructorsData() {
   try {
     const response = await fetch(
-      `${apiUrl}/api/ratings/getAllInstructorRatings`
+      `https://red-cross-api-final.onrender.com/api/ratings/getAllInstructorRatings`
     );
 
     if (response.ok) {
