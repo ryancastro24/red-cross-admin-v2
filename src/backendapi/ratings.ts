@@ -1,7 +1,7 @@
 export async function getInstructorRatings(id: string | undefined) {
   try {
     const response = await fetch(
-      `https://red-cross-api-final-lgct.onrender.com/api/ratings/getInstructorRatings/${id}`
+      `https://red-cross-api-final.onrender.com/api/ratings/getInstructorRatings/${id}`
     );
 
     if (response.ok) {

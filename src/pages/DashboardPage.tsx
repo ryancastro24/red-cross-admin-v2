@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Outlet, useNavigation, useNavigate } from "react-router";
+import { Outlet, useNavigation, useNavigate, useLocation } from "react-router";
 import { Link } from "react-router";
 import { Divider } from "@nextui-org/divider";
 import { TiUserAdd } from "react-icons/ti";
@@ -42,7 +42,7 @@ function generateRunningTime() {
 }
 
 const Dashboard = () => {
-  const [navigation, setNavigation] = useState("/dashboard");
+  const location = useLocation();
   const [time, setTime] = useState(generateRunningTime());
   const pageNavigation = useNavigation();
   const navigate = useNavigate();
@@ -76,9 +76,8 @@ const Dashboard = () => {
         </div>
         <ul className="flex flex-col gap-3">
           <Link
-            onClick={() => setNavigation("/dashboard")}
             className={`hover:bg-red-600 ${
-              navigation === "/dashboard" ? "bg-red-600" : ""
+              location.pathname === "/dashboard" ? "bg-red-600" : ""
             } flex items-center gap-2 text-white px-2 py-3 rounded cursor-pointer`}
             to={"/dashboard"}
           >
@@ -89,9 +88,8 @@ const Dashboard = () => {
           </Link>
 
           <Link
-            onClick={() => setNavigation("register")}
             className={`hover:bg-red-600 ${
-              navigation === "register" ? "bg-red-600" : ""
+              location.pathname === "/dashboard/register" ? "bg-red-600" : ""
             } flex items-center gap-2 text-white px-2 py-3 rounded cursor-pointer`}
             to={"register"}
           >
@@ -101,9 +99,8 @@ const Dashboard = () => {
             <span>Register Form</span>
           </Link>
           <Link
-            onClick={() => setNavigation("users")}
             className={`hover:bg-red-600 ${
-              navigation === "users" ? "bg-red-600" : ""
+              location.pathname === "/dashboard/users" ? "bg-red-600" : ""
             } flex items-center gap-2 text-white px-2 py-3 rounded cursor-pointer`}
             to={"datatable"}
           >
@@ -114,9 +111,8 @@ const Dashboard = () => {
           </Link>
 
           <Link
-            onClick={() => setNavigation("archives")}
             className={`hover:bg-red-600 ${
-              navigation === "archives" ? "bg-red-600" : ""
+              location.pathname === "/dashboard/archives" ? "bg-red-600" : ""
             } flex items-center gap-2 text-white px-2 py-3 rounded cursor-pointer`}
             to={"archives"}
           >
@@ -127,9 +123,8 @@ const Dashboard = () => {
           </Link>
 
           <Link
-            onClick={() => setNavigation("instructors")}
             className={`hover:bg-red-600 ${
-              navigation === "instructors" ? "bg-red-600" : ""
+              location.pathname === "/dashboard/instructors" ? "bg-red-600" : ""
             } flex items-center gap-2 text-white px-2 py-3 rounded cursor-pointer`}
             to={"instructor_page"}
           >
@@ -140,9 +135,10 @@ const Dashboard = () => {
           </Link>
 
           <Link
-            onClick={() => setNavigation("certificates")}
             className={`hover:bg-red-600 ${
-              navigation === "certificates" ? "bg-red-600" : ""
+              location.pathname === "/dashboard/certificates"
+                ? "bg-red-600"
+                : ""
             } flex items-center gap-2 text-white px-2 py-3 rounded cursor-pointer`}
             to={"certificate"}
           >

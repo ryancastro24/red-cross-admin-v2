@@ -1,9 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Input } from "@nextui-org/input";
 import { DatePicker } from "@nextui-org/date-picker";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Button } from "@nextui-org/button";
-import { Link, useFetcher } from "react-router-dom";
+import { useFetcher, useNavigate } from "react-router-dom";
 import { registerUser } from "@/backendapi/user";
 import { Alert } from "@nextui-org/alert";
 import userProfile from "@/assets/userprofile.png";
@@ -83,14 +83,40 @@ const RegisterForm: React.FC = () => {
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(true);
-  const [orNumber, setOrNumber] = useState("");
-  const [error, setError] = useState("");
+
   // const [register, setRegister] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
+  const navigate = useNavigate();
   const fetcher = useFetcher();
 
+  const [orNumber, setOrNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [orNumberError, setOrNumberError] = useState("");
+  const [emailError, setEmailError] = useState("");
+
+  // Update errors based on fetcher response
+  useEffect(() => {
+    if (fetcher.data?.error) {
+      if (fetcher.data.error.includes("Or Number is already Used")) {
+        setOrNumberError(fetcher.data.error);
+      }
+      if (fetcher.data.error.includes("Email is already registered")) {
+        setEmailError(fetcher.data.error);
+      }
+    }
+  }, [fetcher.data]);
+  // Reset error when user types in OR Number
+  const handleOrNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOrNumber(e.target.value);
+    if (orNumberError) setOrNumberError(""); // Clear error when typing
+  };
+
+  // Reset error when user types in Email
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    if (emailError) setEmailError(""); // Clear error when typing
+  };
   console.log("Returned data:", fetcher.data);
   const handleOpenCamera = async (): Promise<void> => {
     try {
@@ -160,11 +186,14 @@ const RegisterForm: React.FC = () => {
             color="success"
             title="Successfully registered user!"
             endContent={
-              <Link to={"/dashboard"}>
-                <Button color="success" size="sm" variant="flat">
-                  Register Another
-                </Button>
-              </Link>
+              <Button
+                onPress={() => navigate(0)}
+                color="success"
+                size="sm"
+                variant="flat"
+              >
+                Register Another
+              </Button>
             }
             onClose={() => setIsVisible(false)}
           />
@@ -174,7 +203,7 @@ const RegisterForm: React.FC = () => {
       <div className="w-full grid grid-cols-[1fr,400px]">
         {/* Form Inputs */}
         <fetcher.Form
-          method="POST"
+          method="post"
           className="w-full grid grid-cols-2 gap-5"
           encType="multipart/form-data"
         >
@@ -184,33 +213,31 @@ const RegisterForm: React.FC = () => {
               type="number"
               label="OR Number"
               name="orNumber"
-              errorMessage={error || "Or Number is already Used"}
-              isInvalid={!!error}
               value={orNumber}
-              onChange={(e) => {
-                setOrNumber(e.target.value);
-                setError(""); // Reset error on typing
-              }}
-              onBlur={() => {
-                if (fetcher.data?.message === "Or Number is already Used") {
-                  setError(fetcher.data.message);
-                }
-              }}
+              onChange={handleOrNumberChange}
+              errorMessage={orNumberError}
+              isInvalid={!!orNumberError} // Ensures validation updates dynamically
             />
           </div>
           <div>
-            <Input required name="name" label="Name" type="text" />
+            <Input
+              required
+              name="name"
+              label="Full Name"
+              type="text"
+              placeholder="Firstname | Middlename | Lastname"
+            />
           </div>
           <div>
             <Input
-              errorMessage="Email is already registered"
-              isInvalid={
-                fetcher.data?.message === "Email is already registered"
-              }
+              required
               name="email"
               label="Email"
               type="email"
-              required
+              value={email}
+              onChange={handleEmailChange}
+              errorMessage={emailError}
+              isInvalid={!!emailError}
             />
           </div>
           <div>
