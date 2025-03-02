@@ -10,27 +10,23 @@ import userProfile from "@/assets/userprofile.png";
 // action function
 export async function action({ request }: any) {
   const formData = await request.formData();
-  const data: Record<string, FormDataEntryValue> = Object.fromEntries(
-    formData.entries()
-  );
-  // Create a FormData instance to send the data to the Express API
+
+  console.log("Form Data Received:", [...formData.entries()]); // ✅ Debugging Log
+
   const apiFormData = new FormData();
 
-  // Append each field in the data to the FormData
-  Object.keys(data).forEach((key) => {
-    // Handle different types of data, e.g., file upload
-    const value = data[key];
+  for (const [key, value] of formData.entries()) {
     if (value instanceof File) {
-      apiFormData.append(key, value, value.name);
+      apiFormData.append(key, value, value.name); // ✅ Safe to access `.name`
     } else {
       apiFormData.append(key, value as string);
     }
-  });
+  }
 
   const resultData = await registerUser(apiFormData);
 
-  console.log(resultData);
-  return resultData; // Return the form data as fallback
+  console.log("API Response:", resultData);
+  return resultData;
 }
 
 interface Option {
@@ -94,7 +90,7 @@ const RegisterForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [orNumberError, setOrNumberError] = useState("");
   const [emailError, setEmailError] = useState("");
-
+  const [capturedFile, setCapturedFile] = useState<File | null>(null);
   // Update errors based on fetcher response
   useEffect(() => {
     if (fetcher.data?.error) {
@@ -144,14 +140,17 @@ const RegisterForm: React.FC = () => {
       canvas.width = videoRef.current.videoWidth;
       canvas.height = videoRef.current.videoHeight;
       context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-      const image = canvas.toDataURL("image/png");
-      setCapturedImage(image);
 
-      // Stop the camera after capture
-      if (cameraStream) {
-        cameraStream.getTracks().forEach((track) => track.stop());
-        setCameraStream(null);
-      }
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const file = new File([blob], "captured-image.png", {
+            type: "image/png",
+          });
+
+          setCapturedFile(file); // ✅ Store File instance for form submission
+          setCapturedImage(URL.createObjectURL(file)); // ✅ Generate preview
+        }
+      }, "image/png");
     }
   };
 
@@ -178,6 +177,20 @@ const RegisterForm: React.FC = () => {
     URL.revokeObjectURL(link.href);
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent default submission
+
+    const formData = new FormData(e.currentTarget); // Get all form inputs
+
+    if (capturedFile) {
+      formData.append("file", capturedFile, capturedFile.name); // ✅ Append captured file
+    }
+
+    fetcher.submit(formData, {
+      method: "POST",
+      encType: "multipart/form-data",
+    });
+  };
   return (
     <div className="w-full flex flex-col gap-5">
       {fetcher.data?.message === "User registered successfully" &&
@@ -206,6 +219,7 @@ const RegisterForm: React.FC = () => {
           method="post"
           className="w-full grid grid-cols-2 gap-5"
           encType="multipart/form-data"
+          onSubmit={handleSubmit}
         >
           <div>
             <Input
@@ -277,7 +291,15 @@ const RegisterForm: React.FC = () => {
             <Input required name="contact" label="Contact" type="number" />
           </div>
           <div>
-            <Input required name="file" label="Upload Image" type="file" />
+            <Input
+              name="file"
+              label="Upload Image"
+              type="file"
+              onChange={(e) => setCapturedFile(e.target.files?.[0] || null)}
+              className="absolute inset-0 w-0 h-0 opacity-0"
+            />
+
+            {capturedFile && <p>Captured file: {capturedFile.name}</p>}
           </div>
           <div className="cols-span-2">
             <Button
@@ -296,24 +318,26 @@ const RegisterForm: React.FC = () => {
           <div
             className="w-full h-[300px] rounded flex justify-center items-center"
             style={{
-              backgroundImage: `url(${userProfile})`,
-              backgroundSize: "90%",
+              backgroundImage: capturedImage
+                ? `url(${capturedImage})`
+                : `url(${userProfile})`,
+              backgroundSize: "cover",
               backgroundPosition: "center",
             }}
           >
-            {capturedImage ? (
-              <img
-                src={capturedImage}
-                alt="Captured"
-                className="w-full h-full object-cover rounded"
-              />
-            ) : (
+            {!capturedImage ? (
               <video
                 ref={videoRef}
                 className="w-full h-full rounded"
                 autoPlay
                 muted
-              ></video>
+              />
+            ) : (
+              <img
+                src={capturedImage}
+                alt="Captured"
+                className="w-full h-full object-cover rounded"
+              />
             )}
           </div>
 

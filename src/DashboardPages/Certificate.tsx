@@ -6,14 +6,14 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/table";
-import { Form } from "react-router-dom";
 import redcrosslogo from "@/assets/redcross_logo.png";
 import { Card, CardBody } from "@nextui-org/card";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import type { Selection } from "@nextui-org/table"; // Import the correct type
 import { getUsersCertToBeUpload } from "@/backendapi/user";
-import { useLoaderData, useNavigation } from "react-router-dom";
+import { useLoaderData, useFetcher, useNavigate } from "react-router-dom";
 import { UserType } from "@/backendapi/user";
+import { Alert } from "@nextui-org/react";
 import { Pagination } from "@nextui-org/pagination";
 import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
@@ -59,6 +59,10 @@ type Users = {
 };
 
 const Certificate = () => {
+  const navigate = useNavigate();
+  const fetcher = useFetcher();
+  const [successFlag, setSuccessFlag] = useState(false);
+  const [generatedFile, setGeneratedFile] = useState<File | null>(null);
   const [instructorsData, setInstructorsData] = useState<Selection>(
     new Set([])
   );
@@ -69,6 +73,12 @@ const Certificate = () => {
     return instructor?.label || ""; // Default to an empty string if no match is found
   });
 
+  useEffect(() => {
+    if (fetcher.data?.message) {
+      setInstructorsData(new Set()); // Clear selection
+      setSuccessFlag(true);
+    }
+  }, [fetcher.data]);
   const formatNames = (names: string[]): string => {
     if (names.length === 0) return "Selected Instructors";
     if (names.length === 1) return names[0];
@@ -77,7 +87,6 @@ const Certificate = () => {
   };
 
   const { users } = useLoaderData() as Users;
-  const navigation = useNavigation();
   // State to store the selected name
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
 
@@ -93,11 +102,7 @@ const Certificate = () => {
     return users.slice(start, end);
   }, [page, users]);
 
-  const handleDownload = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.stopPropagation();
-
+  const handleDownloadAndAttach = async () => {
     const input = document.getElementById("certificate") as HTMLElement | null;
 
     if (!input) {
@@ -105,7 +110,7 @@ const Certificate = () => {
       return;
     }
 
-    html2canvas(input).then((canvas) => {
+    html2canvas(input).then(async (canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("portrait", "pt", "a4");
 
@@ -119,10 +124,20 @@ const Certificate = () => {
       const imgHeight = canvasHeight * ratio;
 
       pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-      pdf.save(`${selectedUser?.name || "certificate"}.pdf`);
+
+      const pdfBlob = pdf.output("blob");
+
+      const file = new File(
+        [pdfBlob],
+        `${selectedUser?.name || "certificate"}.pdf`,
+        {
+          type: "application/pdf",
+        }
+      );
+
+      setGeneratedFile(file);
     });
   };
-
   const handleSelectionChange = (keys: Selection) => {
     let selectedId: string | null = null;
 
@@ -140,6 +155,14 @@ const Certificate = () => {
     );
     setSelectedUser(selectedUser ?? null);
   };
+
+  useEffect(() => {
+    const certificateElement = document.getElementById("certificate");
+
+    if (selectedUser && selectedNames.length > 0 && certificateElement) {
+      handleDownloadAndAttach();
+    }
+  }, [selectedUser, selectedNames]);
 
   const validUntil = selectedUser?.dateStarted
     ? new Intl.DateTimeFormat("en-US", {
@@ -193,6 +216,24 @@ const Certificate = () => {
   return (
     <div className="w-full h-full">
       <h2>Certificate</h2>
+
+      {successFlag && (
+        <Alert
+          color="success"
+          title="Successfully Uploaded Certificate!"
+          endContent={
+            <Button
+              onPress={() => navigate(0)}
+              color="success"
+              size="sm"
+              variant="flat"
+            >
+              Upload Another
+            </Button>
+          }
+          onClose={() => setSuccessFlag(false)}
+        />
+      )}
 
       <CertificateContainer
         name={selectedUser?.name?.toUpperCase()}
@@ -249,51 +290,61 @@ const Certificate = () => {
             )}
           </div>
 
-          <Select
-            className="max-w-xs"
-            label="Instructors"
-            placeholder="Select Instructors"
-            selectedKeys={instructorsData}
-            selectionMode="multiple"
-            onSelectionChange={setInstructorsData}
-          >
-            {instructors.map((val) => (
-              <SelectItem key={val.key}>{val.label}</SelectItem>
-            ))}
-          </Select>
-          <Form
+          <fetcher.Form
             method="POST"
             className="flex flex-col gap-5"
             encType="multipart/form-data"
-          >
-            <div>
-              <Input name="file" type="file" />
-              <Input value={selectedUser?._id} name="id" type="hidden" />
-            </div>
-
-            <div className="flex justify-center items-center gap-4">
-              <Button
-                onClick={handleDownload}
-                color="secondary"
-                variant="shadow"
-                disabled={
-                  !selectedUser || // If no user is selected
-                  !selectedUser?.name || // If no name is available for the selected user
-                  (instructorsData instanceof Set && instructorsData.size === 0) // If no instructors are selected
+            onSubmit={() => {
+              if (generatedFile) {
+                const fileInput =
+                  document.querySelector<HTMLInputElement>(
+                    'input[name="file"]'
+                  );
+                if (fileInput) {
+                  const dataTransfer = new DataTransfer();
+                  dataTransfer.items.add(generatedFile);
+                  fileInput.files = dataTransfer.files;
                 }
+              }
+            }}
+          >
+            <div className="flex justify-between w-full items-center gap-5">
+              <Select
+                className="w-[300px]"
+                label="Instructors"
+                placeholder="Select Instructors"
+                selectedKeys={instructorsData}
+                selectionMode="multiple"
+                onSelectionChange={setInstructorsData}
               >
-                Download Certificate
-              </Button>
-              <Button
-                isLoading={navigation.state === "submitting"}
-                type="submit"
-                color="primary"
-                variant="shadow"
-              >
-                Upload Certificate
-              </Button>
+                {instructors.map((val) => (
+                  <SelectItem key={val.key}>{val.label}</SelectItem>
+                ))}
+              </Select>
+              <div>
+                <Input
+                  name="file"
+                  type="file"
+                  className="absolute inset-0 w-0 h-0 opacity-0"
+                />
+                <Input value={selectedUser?._id} name="id" type="hidden" />
+              </div>
+
+              <div className="flex justify-center items-center gap-4">
+                <Button
+                  isLoading={fetcher.state === "submitting"}
+                  type="submit"
+                  color="primary"
+                  variant="shadow"
+                  isDisabled={
+                    selectedUser === null || selectedNames.length === 0
+                  }
+                >
+                  Upload Certificate
+                </Button>
+              </div>
             </div>
-          </Form>
+          </fetcher.Form>
         </div>
 
         <Card className="w-full h-full p-4 px-8 relative">
