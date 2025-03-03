@@ -29,7 +29,6 @@ export async function action({ request }: any) {
     formData.entries()
   );
 
-  console.log(data.id);
   // Create a FormData instance to send the data to the Express API
   const apiFormData = new FormData();
 
@@ -129,7 +128,7 @@ const Certificate = () => {
 
       const file = new File(
         [pdfBlob],
-        `${selectedUser?.name || "certificate"}.pdf`,
+        `${selectedUser?.lastname || "certificate"}.pdf`,
         {
           type: "application/pdf",
         }
@@ -236,7 +235,7 @@ const Certificate = () => {
       )}
 
       <CertificateContainer
-        name={selectedUser?.name?.toUpperCase()}
+        name={`${selectedUser?.firstname?.toUpperCase()} ${selectedUser?.lastname?.toUpperCase()}`}
         category={selectedUser?.category}
         dateEvaluation={evaluationDate || "No Date"}
         dateStarted={formattedDateStarted || "No Date"}
@@ -270,10 +269,12 @@ const Certificate = () => {
               <TableColumn>NAME</TableColumn>
               <TableColumn>STATUS</TableColumn>
             </TableHeader>
-            <TableBody>
+            <TableBody emptyContent={"No users found"}>
               {items.map((user) => (
                 <TableRow key={user._id}>
-                  <TableCell>{user.name}</TableCell>
+                  <TableCell>
+                    {user.firstname} {user.lastname}
+                  </TableCell>
                   <TableCell>
                     {user.certificateApproved ? "Approved" : "Pending"}
                   </TableCell>
@@ -281,14 +282,6 @@ const Certificate = () => {
               ))}
             </TableBody>
           </Table>
-
-          <div>
-            {selectedUser?.name && (
-              <p>
-                <strong>Selected Name:</strong> {selectedUser?.name}
-              </p>
-            )}
-          </div>
 
           <fetcher.Form
             method="POST"
@@ -377,7 +370,7 @@ const Certificate = () => {
               <p className="text-xs font-thin indent-8 text-justify mt-4">
                 This is to certify that{" "}
                 <strong>
-                  {selectedUser?.name.toUpperCase() ||
+                  {`${selectedUser?.firstname.toUpperCase()} ${selectedUser?.lastname.toUpperCase()}` ||
                     "Sample Name".toUpperCase()}
                 </strong>{" "}
                 graduated OCCUPATIONAL FIRST AID AND BLS CRR/AED TRAINING

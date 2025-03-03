@@ -60,7 +60,8 @@ interface Option {
 type User = {
   id: string;
   _id: string; // Changed `_id` to `id` for consistency, but you can keep `_id` if required
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
   address: string;
   orNumber: number;
@@ -103,7 +104,8 @@ export async function action({ request }: any) {
     );
 
     const userData: UserType = {
-      name: data.name as string,
+      firstname: data.firstname as string,
+      lastname: data.lastname as string,
       email: data.email as string,
       address: data.address as string,
       category: data.category as string,
@@ -127,6 +129,30 @@ const category: Option[] = [
 const address: Option[] = [
   { value: "ALFONSO", label: "ALFONSO" },
   { value: "AMADEO", label: "AMADEO" },
+  { value: "BACOOR CITY", label: "BACOOR CITY" },
+  { value: "CARMONA", label: "CARMONA" },
+  { value: "CAVITY CITY", label: "CAVITY CITY" },
+  { value: "CITY OF DASMARIÑAS", label: "CITY OF DASMARIÑAS" },
+  { value: "GEN. MARIANO ALVAREZ", label: "GEN. MARIANO ALVAREZ" },
+  { value: "GENERAL EMILIO AGUINALDO", label: "GENERAL EMILIO AGUINALDO" },
+  { value: "GENERAL TRIAS", label: "GENERAL TRIAS" },
+  { value: "IMUS CITY", label: "IMUS CITY" },
+  { value: "INDANG", label: "INDANG" },
+  { value: "KAWIT", label: "KAWIT" },
+  { value: "MAGALLANES", label: "MAGALLANES" },
+  { value: "MARAGONDON", label: "MARAGONDON" },
+  { value: "MENDEZ (MENDEZ-NUÑEZ)", label: "MENDEZ (MENDEZ-NUÑEZ)" },
+  { value: "NAIC", label: "NAIC" },
+  { value: "NOVELETA", label: "NOVELETA" },
+  { value: "ROSARIO", label: "ROSARIO" },
+  { value: "SILANG", label: "SILANG" },
+  { value: "TAGAYTAY CITY", label: "TAGAYTAY CITY" },
+  { value: "TANZA", label: "TANZA" },
+  { value: "TERNATE", label: "TERNATE" },
+  {
+    value: "TRECE MARTIRES CITY (CAPITAL)",
+    label: "TRECE MARTIRES CITY (CAPITAL)",
+  },
   // ... (rest of the address list)
 ];
 
@@ -355,8 +381,10 @@ export default function DataTable() {
     let filteredUsers = [...users];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers.filter(
+        (user) =>
+          user.firstname.toLowerCase().includes(filterValue.toLowerCase()) ||
+          user.lastname.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
@@ -391,7 +419,7 @@ export default function DataTable() {
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+    const cellValue = `${user.firstname} ${user.lastname}`;
 
     switch (columnKey) {
       case "name":
@@ -420,7 +448,7 @@ export default function DataTable() {
             size="sm"
             variant="flat"
           >
-            {cellValue}
+            {user.category}
           </Chip>
         );
       case "actions":
@@ -433,7 +461,6 @@ export default function DataTable() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem key="view">View</DropdownItem>
                 <DropdownItem onClick={() => handleEditUser(user)} key="edit">
                   Edit
                 </DropdownItem>
@@ -685,9 +712,18 @@ export default function DataTable() {
                   <div>
                     <Input
                       required
-                      defaultValue={selectedUser?.name}
-                      name="name"
-                      label="Name"
+                      defaultValue={selectedUser?.firstname}
+                      name="firstname"
+                      label="Firstname"
+                      type="text"
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      required
+                      defaultValue={selectedUser?.lastname}
+                      name="lastname"
+                      label="Lastname"
                       type="text"
                     />
                   </div>

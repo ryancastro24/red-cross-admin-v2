@@ -234,13 +234,11 @@ const RegisterForm: React.FC = () => {
             />
           </div>
           <div>
-            <Input
-              required
-              name="name"
-              label="Full Name"
-              type="text"
-              placeholder="Firstname | Middlename | Lastname"
-            />
+            <Input required name="firstname" label="First Name" type="text" />
+          </div>
+
+          <div>
+            <Input required name="lastname" label="Last Name" type="text" />
           </div>
           <div>
             <Input

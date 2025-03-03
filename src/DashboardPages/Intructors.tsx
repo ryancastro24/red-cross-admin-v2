@@ -15,6 +15,12 @@ const InstructorPage = () => {
     <div className="w-full flex flex-col gap-8">
       <h2>Instructor Page</h2>
 
+      {instructors.length === 0 && (
+        <div className="flex justify-center items-center w-full h-full">
+          <h1 className="text-2xl ">No Instrucor Ratings Available</h1>
+        </div>
+      )}
+
       <div className="w-full h-full grid grid-cols-2 gap-5">
         {instructors.map((val: any) => (
           <Link
