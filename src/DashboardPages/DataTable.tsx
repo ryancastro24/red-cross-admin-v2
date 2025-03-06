@@ -61,6 +61,8 @@ type User = {
   id: string;
   _id: string; // Changed `_id` to `id` for consistency, but you can keep `_id` if required
   firstname: string;
+  middlename: string;
+  suffix: string;
   lastname: string;
   email: string;
   address: string;
@@ -106,6 +108,9 @@ export async function action({ request }: any) {
     const userData: UserType = {
       firstname: data.firstname as string,
       lastname: data.lastname as string,
+      middlename: data.middlename as string,
+      suffix: data.suffix as string,
+      contact: data.contact as string,
       email: data.email as string,
       address: data.address as string,
       category: data.category as string,
@@ -276,7 +281,7 @@ export const ChevronDownIcon = ({
 export const columns = [
   { name: "NAME", uid: "name", sortable: true },
   { name: "CATEGORY", uid: "category", sortable: true },
-  { name: "ADDRESS", uid: "address", sortable: true },
+  { name: "LOCATION", uid: "location", sortable: true },
   { name: "OR NUMBER", uid: "orNumber" },
   { name: "GENDER", uid: "gender" },
   { name: "CONTACT", uid: "contact" },
@@ -299,7 +304,7 @@ const INITIAL_VISIBLE_COLUMNS = [
   "name",
   "email",
   "category",
-  "address",
+  "location",
   "actions",
 ];
 
@@ -307,6 +312,18 @@ type loaderData = {
   users: User[];
 };
 
+const fullMiddleNames = [
+  "Dela",
+  "De Guzman",
+  "De Leon",
+  "De Los Reyes",
+  "De La Rosa",
+  "De Castro",
+  "Del Rosario",
+  "Delos Santos",
+  "Del Mundo",
+  "De Vera",
+];
 export default function DataTable() {
   const submit = useSubmit();
   const navigation = useNavigation();
@@ -419,7 +436,11 @@ export default function DataTable() {
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = `${user.firstname} ${user.lastname}`;
+    const cellValue = `${user.firstname} ${
+      fullMiddleNames.includes(user.middlename)
+        ? user.middlename
+        : user.middlename.charAt(0) + "."
+    } ${user.lastname} ${user?.suffix || ""}`;
 
     switch (columnKey) {
       case "name":
@@ -434,6 +455,15 @@ export default function DataTable() {
         );
       case "email":
         return <p>{user.email}</p>;
+
+      case "contact":
+        return <p>{user.contact}</p>;
+      case "orNumber":
+        return <p>{user.orNumber}</p>;
+
+      case "gender":
+        return <p>{user.gender}</p>;
+
       case "address":
         return (
           <div className="flex flex-col">
@@ -700,47 +730,70 @@ export default function DataTable() {
               </ModalHeader>
               <Form method="PUT">
                 <ModalBody className="grid grid-cols-2 gap-5">
-                  <div>
-                    <Input
-                      required
-                      defaultValue={selectedUser?.orNumber.toString()}
-                      name="orNumber"
-                      label="OR Number"
-                      type="number"
-                    />
+                  <div className="col-span-2 grid grid-cols-3 gap-3">
+                    <div>
+                      <Input
+                        required
+                        defaultValue={selectedUser?.firstname}
+                        name="firstname"
+                        label="Firstname"
+                        type="text"
+                      />
+                    </div>
+                    <div>
+                      <Input
+                        required
+                        defaultValue={selectedUser?.middlename}
+                        name="middlename"
+                        label="Middlename"
+                        type="text"
+                      />
+                    </div>
+                    <div>
+                      <Input
+                        required
+                        defaultValue={selectedUser?.lastname}
+                        name="lastname"
+                        label="Lastname"
+                        type="text"
+                      />
+                    </div>
                   </div>
-                  <div>
+
+                  <div className="col-span-2 grid grid-cols-[100px_1fr_1fr] gap-3">
+                    <div>
+                      <Input
+                        defaultValue={selectedUser?.suffix}
+                        name="suffix"
+                        label="Suffix"
+                        type="text"
+                      />
+                    </div>
+
+                    <div>
+                      <Input
+                        required
+                        defaultValue={selectedUser?.contact}
+                        name="contact"
+                        label="Contact Number"
+                        type="number"
+                      />
+                    </div>
                     <Input
                       required
-                      defaultValue={selectedUser?.firstname}
-                      name="firstname"
-                      label="Firstname"
-                      type="text"
+                      defaultValue={selectedUser?._id}
+                      name="id"
+                      type="hidden"
                     />
-                  </div>
-                  <div>
-                    <Input
-                      required
-                      defaultValue={selectedUser?.lastname}
-                      name="lastname"
-                      label="Lastname"
-                      type="text"
-                    />
-                  </div>
-                  <Input
-                    required
-                    defaultValue={selectedUser?._id}
-                    name="id"
-                    type="hidden"
-                  />
-                  <div>
-                    <Input
-                      required
-                      defaultValue={selectedUser?.email}
-                      name="email"
-                      label="Email"
-                      type="email"
-                    />
+                    <div>
+                      <Input
+                        required
+                        defaultValue={selectedUser?.email}
+                        name="email"
+                        label="Email"
+                        type="email"
+                      />
+                    </div>
                   </div>
 
                   <div>
@@ -779,6 +832,16 @@ export default function DataTable() {
                         </SelectItem>
                       ))}
                     </Select>
+                  </div>
+
+                  <div>
+                    <Input
+                      required
+                      defaultValue={selectedUser?.orNumber.toString()}
+                      name="orNumber"
+                      label="OR Number"
+                      type="number"
+                    />
                   </div>
                 </ModalBody>
                 <ModalFooter>

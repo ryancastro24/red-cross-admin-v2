@@ -221,39 +221,49 @@ const RegisterForm: React.FC = () => {
           encType="multipart/form-data"
           onSubmit={handleSubmit}
         >
-          <div>
-            <Input
-              required
-              type="number"
-              label="OR Number"
-              name="orNumber"
-              value={orNumber}
-              onChange={handleOrNumberChange}
-              errorMessage={orNumberError}
-              isInvalid={!!orNumberError} // Ensures validation updates dynamically
-            />
-          </div>
-          <div>
-            <Input required name="firstname" label="First Name" type="text" />
+          <div className="col-span-2 grid grid-cols-3 gap-3">
+            <div>
+              <Input required name="firstname" label="First Name" type="text" />
+            </div>
+
+            <div>
+              <Input
+                required
+                name="middlename"
+                label="Middle Name"
+                type="text"
+              />
+            </div>
+
+            <div>
+              <Input required name="lastname" label="Last Name" type="text" />
+            </div>
           </div>
 
-          <div>
-            <Input required name="lastname" label="Last Name" type="text" />
-          </div>
-          <div>
-            <Input
-              required
-              name="email"
-              label="Email"
-              type="email"
-              value={email}
-              onChange={handleEmailChange}
-              errorMessage={emailError}
-              isInvalid={!!emailError}
-            />
-          </div>
-          <div>
-            <Input required name="password" label="Password" type="password" />
+          <div className="col-span-2 grid grid-cols-3 gap-3">
+            <div>
+              <Input name="suffix" label="Suffix" type="text" />
+            </div>
+            <div>
+              <Input
+                required
+                name="email"
+                label="Email"
+                type="email"
+                value={email}
+                onChange={handleEmailChange}
+                errorMessage={emailError}
+                isInvalid={!!emailError}
+              />
+            </div>
+            <div>
+              <Input
+                required
+                name="password"
+                label="Password"
+                type="password"
+              />
+            </div>
           </div>
 
           <div>
@@ -297,7 +307,18 @@ const RegisterForm: React.FC = () => {
               className="absolute inset-0 w-0 h-0 opacity-0"
             />
 
-            {capturedFile && <p>Captured file: {capturedFile.name}</p>}
+            <div>
+              <Input
+                required
+                type="number"
+                label="OR Number"
+                name="orNumber"
+                value={orNumber}
+                onChange={handleOrNumberChange}
+                errorMessage={orNumberError}
+                isInvalid={!!orNumberError} // Ensures validation updates dynamically
+              />
+            </div>
           </div>
           <div className="cols-span-2">
             <Button

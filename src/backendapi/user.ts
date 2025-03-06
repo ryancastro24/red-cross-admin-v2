@@ -1,6 +1,9 @@
 export type UserType = {
   firstname: string;
   lastname: string;
+  middlename: string;
+  suffix: string;
+  contact: string;
   address: string;
   category: string;
   orNumber: number;
@@ -89,8 +92,6 @@ export async function getAllApprovedUsersData() {
 
 // update user data
 export async function updateUserData(formData: UserType, id: string) {
-  console.log("i was called");
-
   try {
     const response = await fetch(
       `https://red-cross-api-final.onrender.com/api/user/${id}`,

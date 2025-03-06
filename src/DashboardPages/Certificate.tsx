@@ -23,6 +23,19 @@ import jsPDF from "jspdf";
 import { updateUserCertificateUrl } from "@/backendapi/user";
 import { Select, SelectItem } from "@nextui-org/react";
 import { instructors } from "@/libs/instructors";
+
+const fullMiddleNames = [
+  "Dela",
+  "De Guzman",
+  "De Leon",
+  "De Los Reyes",
+  "De La Rosa",
+  "De Castro",
+  "Del Rosario",
+  "Delos Santos",
+  "Del Mundo",
+  "De Vera",
+];
 export async function action({ request }: any) {
   const formData = await request.formData();
   const data: Record<string, FormDataEntryValue> = Object.fromEntries(
@@ -235,7 +248,7 @@ const Certificate = () => {
       )}
 
       <CertificateContainer
-        name={`${selectedUser?.firstname?.toUpperCase()} ${selectedUser?.lastname?.toUpperCase()}`}
+        name={`${selectedUser?.firstname?.toUpperCase()}  ${selectedUser?.middlename?.toUpperCase()} ${selectedUser?.lastname?.toUpperCase()}  ${selectedUser?.suffix?.toUpperCase()}`}
         category={selectedUser?.category}
         dateEvaluation={evaluationDate || "No Date"}
         dateStarted={formattedDateStarted || "No Date"}
@@ -273,7 +286,11 @@ const Certificate = () => {
               {items.map((user) => (
                 <TableRow key={user._id}>
                   <TableCell>
-                    {user.firstname} {user.lastname}
+                    {user.firstname}{" "}
+                    {fullMiddleNames.includes(user.middlename)
+                      ? user.middlename
+                      : user.middlename.charAt(0) + "."}{" "}
+                    {user.lastname} {user?.suffix || ""}
                   </TableCell>
                   <TableCell>
                     {user.certificateApproved ? "Approved" : "Pending"}
@@ -370,7 +387,7 @@ const Certificate = () => {
               <p className="text-xs font-thin indent-8 text-justify mt-4">
                 This is to certify that{" "}
                 <strong>
-                  {`${selectedUser?.firstname.toUpperCase()} ${selectedUser?.lastname.toUpperCase()}` ||
+                  {`${selectedUser?.firstname.toUpperCase()} ${selectedUser?.middlename.toUpperCase()} ${selectedUser?.lastname.toUpperCase()} ${selectedUser?.suffix.toUpperCase()}` ||
                     "Sample Name".toUpperCase()}
                 </strong>{" "}
                 graduated OCCUPATIONAL FIRST AID AND BLS CRR/AED TRAINING
